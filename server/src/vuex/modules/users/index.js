@@ -1,0 +1,13 @@
+import * as consts from "./constants";
+import actions from "./actions";
+import getters from "./getters";
+import mutations from "./mutations";
+import state from "./state";
+
+export default {
+    //namespaced:true,
+    actions: actions,
+    getters: getters,
+    mutations: mutations,
+    state: state
+};

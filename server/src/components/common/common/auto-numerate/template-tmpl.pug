@@ -1,0 +1,19 @@
+md-layout(md-flex="100", md-align="start")
+	md-switch(v-model="autoNumerate")
+		| {{$t('Autonumerate')}}
+	md-layout.plr5(
+		md-flex="50", 
+		md-align="start", 
+		v-if="!autoNumerate"
+	)
+		form.w100(
+			novalidate, 
+			@submit.stop.prevent="submit"
+		)
+			md-input-container
+				label {{$t('Out_order')}}
+				md-select(v-model="orderby")
+					md-option(value="1") {{$t('by_date')}}
+					md-option(value="2") {{$t('by_date_back')}}
+					md-option(value="3") {{$t('by_numbers')}}
+					md-option(value="4") {{$t('by_numbers_back')}}

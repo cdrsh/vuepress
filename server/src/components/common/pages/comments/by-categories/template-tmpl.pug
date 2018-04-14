@@ -1,0 +1,129 @@
+md-layout(md-flex="100")
+
+    //Comments by category
+    by-categories-one(
+        md-flex="100", 
+        v-if="oneCategoryDlg",
+        :catname="catname",
+        :closeCategoryOne="closeCategoryOne",
+        :catid="catid"
+    )
+
+    //Categories list
+    md-layout(md-flex="100", v-show="!oneCategoryDlg")
+        //Search panel
+        md-layout(md-flex="100", v-if="findDlg")
+            form.w100(novalidate @submit.stop.prevent="submit")
+                md-input-container
+                    //Comment text
+                    label
+                        | {{$t('Part_text_comment')}}
+                    md-input(
+                        :placeholder="$t('Find_comment')",
+                        v-model="findTxt"
+                    )
+
+                    //Manage buttons
+                    span.btn-find
+                        md-button.md-raised.btn-nospace(@click="findComment")
+                            md-icon search
+                            | {{$t('Search')}}
+                        md-button.md-raised.btn-nospace(@click="resetFind")
+                            md-icon replay
+                        md-button.md-raised.btn-nospace(@click="closeFind")
+                            md-icon close
+
+
+
+        md-layout(md-flex="100")
+            md-layout(
+                md-flex-xsmall="100",
+                md-flex-small="100",
+                md-flex-medium="100",
+                md-flex-large="50",
+                md-flex-xlarge="50",
+                md-align-xsmall="center",
+                md-align-small="start",
+                md-align-medium="start",
+                md-align-large="start",
+                md-align-xlarge="start"
+            )
+                //Close button
+                md-button.h40.md-raised.md-primary(
+                    @click="removeCommentsOfCategories",
+                    :title="$t('Remove_comments')"
+                )
+                    md-icon close
+                    b &nbsp;{{$t('Remove')}}
+                
+                //Search button
+                md-button.h40.md-raised.md-primary(@click="toggleFindDlg")
+                    md-icon search
+                    b &nbsp;{{$t('Search')}}
+
+            md-layout(
+                md-flex-xsmall="100",
+                md-flex-small="100",
+                md-flex-medium="100",
+                md-flex-large="50",
+                md-flex-xlarge="50",
+                md-align-xsmall="center",
+                md-align-small="center",
+                md-align-medium="end",
+                md-align-large="end",
+                md-align-xlarge="end"
+            )
+                //Paginator
+                paginator.brdb(
+                    :onChange="onChangePage", 
+                    :itemsCount="$store.getters.getByCategoriesAllItemsCount", 
+                    :itemsPerPage="$store.getters.getByCategoriesItemsPerPage"
+                )
+
+        //Language selector
+        md-layout(
+            md-flex="100", 
+            md-align="end",
+            v-show="$store.getters.getLangsContentSelected.length>1"
+        )
+            select-content-language    
+
+
+        //Get categories list
+        md-layout.comments-list(
+            md-flex="100",
+            v-for="itm in $store.getters.getByCategories",
+            :key="itm.id"
+        )
+            //Category id
+            md-layout(md-flex="100")
+                md-checkbox(v-model="itmChk", :md-value="itm.id")
+                    | {{itm.id}}
+            
+            //Category name
+            md-layout(md-flex="100")
+                | {{itm["name_"+getContentLang]}}
+            
+            //Comments count
+            md-layout(md-flex="100")
+                | {{$t('comments')}}: {{itm.cnt}}
+            
+            //Creation date
+            md-layout(md-flex="100", md-align="end")
+                | {{$t('Creation_date')}}: {{itm.dt}}
+            
+            //Manage buttons
+            md-layout.ptb5(md-flex="100", md-align="end")
+                //Remove comments in current category
+                md-button.md-icon-button.md-raised(
+                    :title="$t('Remove_comments_of_category')",
+                    @click="removeCommentsOfCategory(itm.id)"
+                )
+                    md-icon close
+                
+                //Enter category
+                md-button.md-icon-button.md-raised(
+                    :title="$t('All_comments_of_current_category')",
+                    @click="enterCategory(itm.id,itm['name_'+getContentLang])"
+                )
+                    md-icon chevron_right

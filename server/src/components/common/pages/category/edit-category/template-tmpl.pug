@@ -1,0 +1,86 @@
+md-layout.mrgn5.pr5.pt5(md-flex="100")
+    //Save category indicator
+    md-layout(
+        md-flex="100", 
+        md-align="center", 
+        v-if="$store.getters.getSaveIndicatorCategory"
+    )
+        md-layout(md-flex="100", md-align="center")
+            h2 {{$t('Category_saving')}}...
+        md-layout(md-flex="100", md-align="center")
+            md-spinner(:md-size="150", md-indeterminate="")
+
+    .edit-category(v-if="!$store.getters.getSaveIndicatorCategory")
+        //Title
+        .ac.brdb
+            h3 {{$t('Edit_category')}}
+        md-layout(
+            md-flex="100", 
+            v-show="$store.getters.getLangsContentSelected.length>1"
+        )
+            //Copy to all languages Button
+            md-layout(
+                md-flex-xsmall="100",
+                md-flex-small="100",
+                md-flex-medium="50",
+                md-flex-large="50",
+                md-flex-xlarge="50",
+                md-align="end"
+            )
+                md-button.md-raised.h25px(@click="onCopyToAllLangs")
+                    | {{$t('Copy_to_All_Languages')}}
+
+            //Content language selector
+            md-layout(
+                md-flex-xsmall="100", 
+                md-flex-small="100", 
+                md-flex-medium="50", 
+                md-flex-large="50", 
+                md-flex-xlarge="50",
+                md-align="end", 
+                v-show="$store.getters.getLangsContentSelected.length>1"
+            )
+                select-content-language
+
+        md-layout(md-flex="100", md-align="start")
+            //Category name
+            md-input-container
+                label
+                    | {{$t('Edit_category')}}
+                md-input(
+                    type="text",
+                    :placeholder="$t('New_category_name')",
+                    v-model="nameTmp",
+                    name="Category", 
+                )
+
+        //Autonumerate
+        auto-numerate(
+            @autoNumerateChanged="onAutoNumerateChanged",
+            :autoNumerateInit="editCatObj.auto_numerate",
+            :orderbyInit="editCatObj.orderby"
+        )
+
+        //Keywords
+        self-keywords(
+            @selfKeywordsChanged="onSelfKeywordsChanged",
+            :keyWordsInit="editCatObj.kwrds",
+            :keyWordsSelfOnInit="editCatObj.kwrdson"
+        )
+
+        //User fields
+        user-fields(
+            @userFieldsChanged="onUserFieldsChanged",
+            :userFieldsInit="editCatObj.uflds",
+            :userFieldsSelfOnInit="editCatObj.user_fields_on"
+        )
+
+        //Buttons Save/Cancel
+        md-layout(md-flex="100", md-align="center")
+            md-button.md-raised(
+                @click="$store.dispatch('openEditCategoryDlg',{vis:false})"
+            )
+                b {{$t('Cancel')}}
+            md-button.md-raised.md-primary(@click="saveEditCategory")
+                b {{$t('Save')}}
+

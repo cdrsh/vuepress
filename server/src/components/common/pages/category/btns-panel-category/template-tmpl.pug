@@ -1,0 +1,43 @@
+md-layout(md-flex="100")
+    md-layout(md-flex="90")
+        md-toolbar.md-accent.md-transparent.md-dense(
+            v-show="!$store.getters.getCategoryFilterMode"
+        )
+            //Add category
+            md-button.md-raised.md-primary(
+                v-if="onClickAdd!=undefined", 
+                @click="onClickAdd",
+                style="margin-left:5px;margin-right:5px;"
+            )
+                md-icon add_circle
+                label.hand-cur &nbsp;{{$t('Add')}}
+
+            //Remove category
+            md-button.md-raised.md-primary(
+                v-if="onClickDelete!=undefined", 
+                @click="onClickDelete",
+                style="margin-left:5px;margin-right:5px;"
+            )
+                md-icon remove_circle
+                label.hand-cur &nbsp;{{$t('Remove')}}
+
+            //Categories
+            md-button.md-raised.md-primary(
+                v-if="onClickCategory!=undefined", 
+                @click="onClickCategoryRun",
+                style="margin-left:5px;margin-right:5px;"
+            )
+                md-icon view_module
+                label.hand-cur &nbsp;{{$t('categories')}}
+
+        //Category find title
+        h3(v-show="$store.getters.getCategoryFilterMode")
+            | {{$t('Category_find')}}
+
+    //Category find button
+    md-layout(md-flex="10", md-align="end")
+        md-button.md-icon-button.md-raised(
+            @click="onClickFilter",
+            :class="{'md-primary':!$store.getters.getCategoryFilterMode}"
+        )
+            md-icon search

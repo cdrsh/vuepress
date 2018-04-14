@@ -1,0 +1,102 @@
+md-layout(md-flex="100")
+
+    //Category select panel
+    post-edit-select-category(
+        v-if="categorySelDlg",
+        :onSelectCategory="onSelectCategory",
+        :selectedIDsInit="editObj.category",
+        :setAddPostSelCatVis="closeSelCategory"
+    )
+
+
+    md-layout(md-flex="100", v-show="!categorySelDlg")
+
+        //Title dialog
+        md-layout.brdb(md-flex="100")
+            md-layout(md-flex="50")
+                h2 {{$t('Rss_edit')}}
+            
+            //Close edit dialog button
+            md-layout(md-flex="50", md-align="end")
+                md-button.md-icon-button.md-raised(
+                    :title="$t('Back_to_rss_list')",
+                    @click="closeFn"
+                )
+                    md-icon close
+       
+        //RSS title
+        md-layout(md-flex="100")
+            md-input-container
+                label {{$t('Title')}}
+                md-input(
+                    type="text",
+                    :placeholder="$t('Title')",
+                    v-model="editObj.title",
+                    name="Title", 
+                    v-validate="'required'", 
+                    data-vv-delay="1000", 
+                    :class="{'input':true,'is-danger':errors.has('Title') }",
+                )
+                md-layout.c-red(
+                    v-show="errors.has('Title')", 
+                    column="", 
+                    md-align="end") 
+                    | {{ errors.first('Title') }}
+
+        //RSS description
+        md-layout(md-flex="100")
+            md-input-container
+                label
+                    | {{$t('Description')}}
+                md-input(
+                    :placeholder="$t('Description')",
+                    v-model="editObj.description"
+                )
+
+        //RSS Link
+        //md-layout(md-flex="100")
+            md-input-container
+                label
+                    | {{$t('Link')}}
+                md-input(
+                    :placeholder="$t('Link')",
+                    v-model="editObj.link"
+                )
+
+        //Categories list
+        md-layout(md-flex="100")
+            | {{$t('Selected_categories')}}: {{getCategories}}
+
+
+        //Content language selector
+        md-layout(
+            md-flex="50", 
+            md-align="end", 
+            md-flex-offset="50",
+            v-show="$store.getters.getLangsContentSelected.length>1"
+        )
+            select-content-language
+
+        //Manage buttons
+        md-layout(md-flex="100", md-align="end")
+
+            //Select category button
+            md-button.md-raised.md-primary(
+                @click="selCategory"
+            )
+                md-icon view_module
+                span.plr5 {{$t('categories')}}
+            
+            //Cancel button
+            md-button.md-raised(
+                @click="closeFn"
+            )
+                | {{$t('Cancel')}}
+            
+            //Save button
+            md-button.md-raised.md-primary(
+                @click="saveRSS",
+                :disabled="editObj.category.length==0"
+            )
+                | {{$t('Save')}}
+

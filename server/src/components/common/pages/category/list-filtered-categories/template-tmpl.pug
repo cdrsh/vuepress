@@ -1,0 +1,56 @@
+md-layout(md-flex="100")
+    //Select content language
+    md-layout(
+        md-flex="50",
+        md-align="end",
+        md-flex-offset="50",
+        v-show="$store.getters.getLangsContentSelected.length>1"
+    )
+        select-content-language
+
+    //Categories filtered
+    md-layout.brdb(
+        md-flex="100",
+        v-for="itm in $store.getters.getFilteredCategories(contentLang)",
+        :key="itm.id"
+    )
+        //Category name
+        md-layout(
+            md-flex-xsmall="100",
+            md-flex-small="100",
+            md-flex-medium="55",
+            md-flex-large="65",
+            md-flex-xlarge="80",
+            md-align="start"
+        )
+            | {{itm['name_'+contentLang]}}
+        
+        //Categories manage buttons
+        md-layout.mtb5(
+            md-flex-xsmall="100",
+            md-flex-small="100",
+            md-flex-medium="45",
+            md-flex-large="35",
+            md-flex-xlarge="20",
+            md-align="end"
+        )
+            //Edit category button
+            md-button.md-icon-button.md-list-action.md-raised(
+                title="Edit category",
+                @click="$store.dispatch(\
+                        'openEditCategoryDlg',\
+                        {vis:true, id:itm.id})"
+            )
+                md-icon.icon-gray create
+            
+            //Remove category button
+            md-button.md-icon-button.md-list-action.md-raised(
+                title="Remove category",
+                @click="$store.dispatch(\
+                        'removeOneCategory',\
+                        {id:itm.id,r:$router})"
+            )
+                md-icon.icon-gray close
+
+
+

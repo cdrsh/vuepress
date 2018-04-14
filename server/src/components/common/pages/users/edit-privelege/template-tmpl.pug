@@ -1,0 +1,44 @@
+md-layout.pad15(md-flex="100")
+    //Dialog title
+    md-layout.brdb(md-flex="100")
+        md-layout(md-flex="50")
+            h2 {{$t('Users_privelege')}}
+        
+        //Close button
+        md-layout(md-flex="50", md-align="end")
+            md-button.md-icon-button.md-raised(
+                :title="$t('Back_to_user_list')",
+                @click="closeFn"
+            )
+                md-icon close
+    
+    //Priveleges
+    md-layout(md-flex="100")
+        md-checkbox(v-model="adminA") {{$t('Admin_access')}}
+    md-layout(md-flex="100")
+        md-checkbox(v-model="filesRW") {{$t('Files_management')}}
+    md-layout(md-flex="100")
+        md-checkbox(v-model="categoryW") {{$t('Category_Write')}}
+    md-layout(md-flex="100")
+        md-checkbox(v-model="categoryR") {{$t('Category_Read')}}
+    md-layout(md-flex="100")
+        md-checkbox(v-model="usersW") {{$t('Users_Write')}}
+    md-layout(md-flex="100")
+        md-checkbox(v-model="usersR") {{$t('Users_Read')}}
+    md-layout(md-flex="100")
+        md-checkbox(v-model="postW") {{$t('Posts_Write')}}
+    md-layout(md-flex="100")
+        md-checkbox(v-model="postR") {{$t('Posts_Read')}}
+    md-layout(md-flex="100")
+        md-checkbox(v-model="blocked") {{$t('Priv_Blocked')}}
+
+    //Manage buttons
+    md-layout.brdt(md-flex="100", md-align="end")
+        
+        //Cancel button
+        md-button.md-raised(@click="closeFn")
+            | {{$t('Cancel')}}
+        
+        //Save button
+        md-button.md-raised.md-primary(@click="savePriv")
+            | {{$t('Save')}}

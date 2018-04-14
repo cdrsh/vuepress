@@ -1,0 +1,134 @@
+md-layout(md-flex="100")
+    md-layout(md-flex="100", v-if="!editDlg")
+        //Title dialog
+        md-layout.brdb(md-flex="100")
+
+            //Email user
+            md-layout(md-flex="50", md-align="start")
+                h2 {{$t('Comments_of_user')}} {{usr.email}}
+            
+            //Button close comments of user
+            md-layout(md-flex="50", md-align="end")
+                md-button.md-icon-button.md-raised(
+                    :title="$t('Back_to_comments')", 
+                    @click="closeCommentOfUserDlg"
+                )
+                    md-icon close
+
+        //Find panel
+        md-layout(md-flex="100", v-if="findDlg")
+            form.w100(novalidate @submit.stop.prevent="submit")
+                md-input-container
+
+                    //Find comment text
+                    label
+                        | {{$t('Part_text_comment')}}
+                    md-input(
+                        :placeholder="$t('Find_comment')",
+                        v-model="findTxt"
+                    )
+
+                    //Manage buttons
+                    span.btn-find
+
+                        //Find button
+                        md-button.md-raised.btn-nospace(@click="findComment")
+                            md-icon search
+                            | {{$t('Search')}}
+
+                        //Reset button
+                        md-button.md-raised.btn-nospace(@click="resetFind")
+                            md-icon replay
+                        
+                        //Close find button
+                        md-button.md-raised.btn-nospace(@click="closeFind")
+                            md-icon close
+
+        //Buttons panel Remove/Block/Toggle find
+        md-layout(md-flex="100")
+            md-layout(
+                md-flex-xsmall="100",
+                md-flex-small="100",
+                md-flex-medium="100",
+                md-flex-large="50",
+                md-flex-xlarge="50",
+                md-align-xsmall="center",
+                md-align-small="center",
+                md-align-medium="start",
+                md-align-large="start",
+                md-align-xlarge="start"
+            )
+                //Remove checked comments
+                md-button.h40.md-raised.md-primary(@click="removeComments")
+                    md-icon close
+                    b &nbsp;{{$t('Remove')}}
+                
+                //Toggle find button
+                md-button.h40.md-raised.md-primary(@click="toggleFindDlg")
+                    md-icon search
+                    b &nbsp;{{$t('Search')}}
+
+            //Paginator comments
+            md-layout(
+                md-flex-xsmall="100",
+                md-flex-small="100",
+                md-flex-medium="100",
+                md-flex-large="50",
+                md-flex-xlarge="50",
+                md-align-xsmall="center",
+                md-align-small="center",
+                md-align-medium="end",
+                md-align-large="end",
+                md-align-xlarge="end"
+            )
+                paginator.brdb(
+                    :onChange="onChangePageOneUserComments", 
+                    :itemsCount="$store.getters.getByUsersOneCommentAllItems", 
+                    :itemsPerPage="$store.getters.getAllCommentsItemsPerPage"
+                )
+
+
+
+        //Comments list
+        md-layout(md-flex="100")
+            md-layout.comments-list(
+                md-flex="100",
+                v-for="itm in $store.getters.getByUsersOneComment",
+                :key="itm.id"
+            )
+                //Comment id
+                md-layout(md-flex="100")
+                    md-checkbox(v-model="itmChk", :md-value="itm.id")
+                        b {{itm.id}}
+                
+                //Comment text
+                md-layout(md-flex="100")
+                    | {{itm.txt}}
+                
+                //Date
+                md-layout(md-flex="100", md-align="end")
+                    | {{itm.dt}}
+                
+                //Manage buttons
+                md-layout(md-flex="100", md-align="center")
+                    md-layout(md-flex="100", md-align="end")
+
+                        //Edit comment button
+                        md-button.md-icon-button.md-raised(
+                            :title="$t('Edit_comment')",
+                            @click="showEditComment(itm.id)"
+                        )
+                            md-icon.icon-gray create
+                        
+                        //Remove comment button
+                        md-button.md-icon-button.md-raised(
+                            :title="$t('Remove_comment')",
+                            @click="removeComment(itm.id)"
+                        )
+                            md-icon.icon-gray close
+
+    //Edit comment of user
+    edit-comment-of-user(
+        v-if="editDlg",
+        :closeEditComment="closeEditComment"
+    )

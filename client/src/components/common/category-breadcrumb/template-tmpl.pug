@@ -1,0 +1,18 @@
+md-layout.breadcrumb-bg.ptb5(
+    md-flex="100",
+    md-align="start",
+    md-vertical-align="center"
+)
+    a.breadcrmb.hrf.mr11.ml5(
+        v-for="itm in getCategoriesBreadcrumb(\
+                    ($route.params.id!==undefined)\
+                        ?$route.params.id:\
+                        -1)",
+        @click="goToCategory(itm.id)",
+        active-class="active"
+    )
+        span.md-primary
+            .fnt12.bld 
+                | {{itm['name_'+getContentLang]}} &rsaquo;
+
+

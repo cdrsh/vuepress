@@ -1,0 +1,58 @@
+md-layout(md-flex="100",md-align="end")
+    .flex-row.w100
+        //Post find type selector
+        .flex-strtch0.plr5.flxend
+            md-input-container.ptb16
+                md-select(v-model="findBy")
+
+                    //By post header
+                    md-option(value="v1")
+                        | {{$t('By_post_header')}}
+
+                    //By post content
+                    md-option(value="v2")
+                        | {{$t('By_post_text')}}
+
+        .flex-strtch1.flxend
+            form(novalidate, @submit.stop.prevent="submit")
+                md-input-container
+                    //Post find text
+                    label
+                        | {{$t('Find_post')}}
+                    md-input(
+                        :placeholder="$t('Find_post')",
+                        v-model="findTxt"
+                    )
+                    
+                    //Manage buttons
+                    span.btn-find
+
+                        //Search button
+                        md-button.md-raised.btn-nospace(@click="findPost")
+                            md-icon search
+                            | {{$t('Search')}}
+                        
+                        //Reset button
+                        md-button.md-raised.btn-nospace(@click="resetFind")
+                            md-icon replay
+
+                        //Close search button
+                        md-button.md-raised.btn-nospace(@click="closeFn")
+                            md-icon close
+
+    //Content language selector
+    md-layout(
+        md-flex="50", 
+        md-align="end", 
+        md-flex-offset="50",
+        v-show="getLangsContentSelected.length>1"
+    )
+        select-content-language
+
+    //Paginator posts found
+    paginator(
+        :onChange="onChangePage", 
+        :itemsCount="getPostPaginatorData.postItemsFoundCount", 
+        :itemsPerPage="getPostPaginatorData.postItemsPerPageFound"
+    )
+

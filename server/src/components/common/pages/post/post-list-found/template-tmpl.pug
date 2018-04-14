@@ -1,0 +1,169 @@
+md-layout(md-flex="100")
+    md-layout.pb20.brdb.pt5(
+        md-flex="100",
+        v-for="itm in getPostListFound",
+        :key="itm.id"
+    )
+
+        md-layout.w100.my-divider
+            | &nbsp;
+
+        //Manage buttons
+        md-layout(md-flex="100", md-align="start")
+
+            //Checkbox post
+            md-layout.plr10(
+                md-flex-xsmall="100",
+                md-flex-small="30",
+                md-flex-medium="20",
+                md-flex-large="15",
+                md-flex-xlarge="15",
+            )
+                md-checkbox(v-model="itm.chkd")
+                    | {{itm.id}}
+            md-layout.brdb.plr10(
+                md-flex-xsmall="100",
+                md-flex-small="70",
+                md-flex-medium="80",
+                md-flex-large="85",
+                md-flex-xlarge="85",
+                md-align="end"
+            )
+
+                //Edit post button
+                md-button.md-icon-button.md-list-action.md-raised(
+                    :title="$t('Edit_post')", 
+                    @click="$store.dispatch('editPost',{id:itm.id,r:$router})"
+                )
+                    md-icon.icon-gray create
+                
+                //Remove post button
+                md-button.md-icon-button.md-list-action.md-raised(
+                    :title="$t('Remove_post')",
+                    @click="$store.dispatch('removePost',\
+                                {ids:[itm.id],r:$router})"
+                )
+                    md-icon.icon-gray close
+
+        //Post title
+        md-layout.ptb5(md-flex="100")
+            md-layout.plr10(
+                md-flex-xsmall="100",
+                md-flex-small="30",
+                md-flex-medium="20",
+                md-flex-large="15",
+                md-flex-xlarge="15",
+                md-align-xsmall="start",
+                md-align-small="end",
+                md-align-medium="end",
+                md-align-large="end",
+                md-align-xlarge="end",
+            )
+                b {{$t('Title')}}
+            md-layout.brdb.plr10(
+                md-flex-xsmall="100",
+                md-flex-small="70",
+                md-flex-medium="80",
+                md-flex-large="85",
+                md-flex-xlarge="85",
+            )
+                | {{itm['title_'+getContentLang]}}
+
+        //Post categories
+        md-layout.ptb5(md-flex="100")
+            md-layout.plr10(
+                md-flex-xsmall="100",
+                md-flex-small="30",
+                md-flex-medium="20",
+                md-flex-large="15",
+                md-flex-xlarge="15",
+                md-align-xsmall="start",
+                md-align-small="end",
+                md-align-medium="end",
+                md-align-large="end",
+                md-align-xlarge="end",
+            )
+                b {{$t('categories')}}
+            md-layout.brdb.plr10(
+                md-flex-xsmall="100",
+                md-flex-small="70",
+                md-flex-medium="80",
+                md-flex-large="85",
+                md-flex-xlarge="85",
+            )
+                span(v-for="(cat,index) in itm.categories")
+                    | {{getCatName(cat)}}
+                    | {{(index==itm.categories.length-1)?'':',&nbsp;'}}
+
+        //Post Author
+        md-layout.ptb5(md-flex="100")
+            md-layout.plr10(
+                md-flex-xsmall="100",
+                md-flex-small="30",
+                md-flex-medium="20",
+                md-flex-large="15",
+                md-flex-xlarge="15",
+                md-align-xsmall="start",
+                md-align-small="end",
+                md-align-medium="end",
+                md-align-large="end",
+                md-align-xlarge="end",
+            )
+                b {{$t('Author')}}
+            md-layout.brdb.plr10(
+                md-flex-xsmall="100",
+                md-flex-small="70",
+                md-flex-medium="80",
+                md-flex-large="85",
+                md-flex-xlarge="85",
+            )
+                | {{getUser(itm.user)}}
+
+        //Date creation
+        md-layout.ptb5(md-flex="100")
+            md-layout.plr10(
+                md-flex-xsmall="100",
+                md-flex-small="30",
+                md-flex-medium="20",
+                md-flex-large="15",
+                md-flex-xlarge="15",
+                md-align-xsmall="start",
+                md-align-small="end",
+                md-align-medium="end",
+                md-align-large="end",
+                md-align-xlarge="end",
+            )
+                b {{$t('Creation_date')}}
+            md-layout.brdb.plr10(
+                md-flex-xsmall="100",
+                md-flex-small="70",
+                md-flex-medium="80",
+                md-flex-large="85",
+                md-flex-xlarge="85",
+            )
+                | {{itm.dt}}
+
+        //Status Published/Not Published
+        md-layout.ptb5(md-flex="100")
+            md-layout.plr10(
+                md-flex-xsmall="100",
+                md-flex-small="30",
+                md-flex-medium="20",
+                md-flex-large="15",
+                md-flex-xlarge="15",
+                md-align-xsmall="start",
+                md-align-small="end",
+                md-align-medium="end",
+                md-align-large="end",
+                md-align-xlarge="end",
+            )
+                b {{$t('Published')}}
+            md-layout.plr10(
+                md-flex-xsmall="100",
+                md-flex-small="70",
+                md-flex-medium="80",
+                md-flex-large="85",
+                md-flex-xlarge="85",
+            )
+                | {{itm.ispub==1?$t('Yes'):$t('No')}}
+

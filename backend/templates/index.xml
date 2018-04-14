@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0">
+  <channel>
+    <title><?=$title?></title>
+    <link><?=$link?></link>
+    <description><?=$description?></description>
+    <pubDate><?=$pubDate?></pubDate>
+    <?php for($i=0;$i<count($items);$i++) {?>
+      <item>
+        <title><?php print($items[$i]["title"]); ?></title>
+        <!--link>https://www.w3schools.com/xml</link-->
+        <description><?php print($items[$i]["description"]); ?></description>
+        <pubDate><?php print($items[$i]["pubDate"]); ?></pubDate>
+      </item>
+    <?php } ?>
+  </channel>
+</rss> 

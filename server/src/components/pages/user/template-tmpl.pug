@@ -1,0 +1,453 @@
+md-layout.pad5(md-flex="100")
+	//Load users indiactor
+	md-layout(
+		md-flex="100", 
+		md-align="center", 
+		v-if="$store.getters.getUsersLoadingIndicator"
+	)
+		md-layout(md-flex="100", md-align="center")
+			h2 {{$t('Users_loading')}}...
+		md-layout(md-flex="100", md-align="center")
+			md-spinner(:md-size="150", md-indeterminate="")
+
+	//Block users indiactor
+	md-layout(
+		md-flex="100", 
+		md-align="center", 
+		v-if="$store.getters.getUsersBlockingIndicator"
+	)
+		md-layout(md-flex="100", md-align="center")
+			h2 {{$t('Users_blocking')}}...
+		md-layout(md-flex="100", md-align="center")
+			md-spinner(:md-size="150", md-indeterminate="")
+
+	//Change priveleges indiactor
+	md-layout(
+		md-flex="100", 
+		md-align="center", 
+		v-if="$store.getters.getUsersPrivelegeIndicator"
+	)
+		md-layout(md-flex="100", md-align="center")
+			h2 {{$t('Users_privelege_set')}}...
+		md-layout(md-flex="100", md-align="center")
+			md-spinner(:md-size="150", md-indeterminate="")
+
+	//User add indiactor
+	md-layout(
+		md-flex="100", 
+		md-align="center", 
+		v-if="$store.getters.getUserAddIndicator"
+	)
+		md-layout(md-flex="100", md-align="center")
+			h2 {{$t('User_adding')}}...
+		md-layout(md-flex="100", md-align="center")
+			md-spinner(:md-size="150", md-indeterminate="")
+
+	//User save indiactor
+	md-layout(
+		md-flex="100", 
+		md-align="center", 
+		v-if="$store.getters.getUserSaveIndicator"
+	)
+		md-layout(md-flex="100", md-align="center")
+			h2 {{$t('User_saving')}}...
+		md-layout(md-flex="100", md-align="center")
+			md-spinner(:md-size="150", md-indeterminate="")
+
+	//User remove indiactor
+	md-layout(
+		md-flex="100", 
+		md-align="center", 
+		v-if="$store.getters.getUsersRemovingIndicator"
+	)
+		md-layout(md-flex="100", md-align="center")
+			h2 {{$t('User_removing')}}...
+		md-layout(md-flex="100", md-align="center")
+			md-spinner(:md-size="150", md-indeterminate="")
+
+
+	md-layout(
+		md-flex="100",
+		v-show="\
+		!$store.getters.getUsersLoadingIndicator && \
+		!$store.getters.getUsersBlockingIndicator && \
+		!$store.getters.getUsersPrivelegeIndicator && \
+		!$store.getters.getUserAddIndicator && \
+		!$store.getters.getUserSaveIndicator && \
+		!$store.getters.getUsersRemovingIndicator"
+	)
+		//Add user panel
+		add-user(v-if='addUserDlg', :closeFn="hideAddUserDlg")
+
+		//Edit user panel
+		edit-user(
+			v-if='editUserDlg', 
+			:closeFn="hideEditUserDlg", 
+			:userEdit="userEdit"
+		)
+
+		//Edit priveleges panel
+		edit-privelege(
+			v-if="editPrivelegeDlg",
+			:editPrivNum="editPrivNum",
+			:ids="idsPriv",
+			:closeFn="hideEditPrivDlg"
+		)
+
+
+		md-layout(
+			md-flex="100", 
+			v-show="!editUserDlg && !addUserDlg && !editPrivelegeDlg"
+		)
+			//Manage buttons
+			users-manage-buttons(
+				:addFn="showAddUserDlg",
+				:removeFn="removeCheckedUsers",
+				:blockFn="blockCheckedUsers",
+				:settingsFn="showEditPrivDlg",
+				:findFn="showFindDlg",
+			)
+
+			//Find users dialog
+			md-layout(md-flex="100", v-if="findDlg")
+				.flex-row.w100
+					//find by dropdown
+					.flex-strtch0.plr5(style="align-self:flex-end")
+						md-input-container.findby
+							label {{$t('Find_by')}}
+							md-select(v-model="findNum")
+
+								//Email
+								md-option(value="0")
+									| {{$t('By_email')}}
+								
+								//First name
+								md-option(value="1")
+									| {{$t('By_first_name')}}
+								
+								//Middle name
+								md-option(value="2")
+									| {{$t('By_middle_name')}}
+								
+								//Last name
+								md-option(value="3")
+									| {{$t('By_last_name')}}
+								
+								//Nick name
+								md-option(value="4")
+									| {{$t('By_nick')}}
+								
+								//Phone
+								md-option(value="5")
+									| {{$t('By_phone')}}
+								
+								//Site
+								md-option(value="6")
+									| {{$t('By_site')}}
+								//
+									md-option(value="7")
+										| By privelege
+
+					.flex-strtch1(style="align-self:flex-end")
+						form(novalidate, @submit.stop.prevent="submit")
+							md-input-container
+								//Text find
+								label
+									| {{findbyPlaceholder}}
+								md-input(
+									:placeholder="findbyPlaceholder",
+									v-model="findTxt",
+									v-show="(findNum>=0 && findNum<7) || findNum==-1"
+								)
+
+								//Manage buttons
+								span.btn-find
+
+									//Search button
+									md-button.md-raised.btn-nospace(@click="findUser")
+										md-icon search
+										| {{$t('Search')}}
+									
+									//Reset search button
+									md-button.md-raised.btn-nospace(@click="resetFind")
+										md-icon replay
+									
+									//Close search dialog
+									md-button.md-raised.btn-nospace(@click="closeFind")
+										md-icon close
+
+			//Paginator users
+			paginator.brdb(
+				:onChange="onChangePage", 
+				:itemsCount="$store.getters.getUsersAllCount",
+				:itemsPerPage="$store.getters.getUsersPerPage"
+			)
+
+			//User list
+			md-layout.plr5(
+				md-flex="100",
+				v-for="itm in $store.getters.getUserList",
+				:key="itm.id"
+			)
+				//User id
+				md-layout(md-flex="100")
+					md-checkbox(v-model="itmChk", :md-value="itm.id")
+						b {{itm.id}}
+
+				//Email
+				md-layout(md-flex="100")
+					md-layout.plr5(
+						md-flex-xsmall="100", 
+						md-flex-small="30", 
+						md-flex-medium="20", 
+						md-flex-large="20", 
+						md-flex-xlarge="10", 
+						md-align-xsmall="start",
+						md-align-small="end",
+						md-align-medium="end",
+						md-align-large="end",
+						md-align-xlarge="end",
+					)
+						b {{$t('email')}}
+					md-layout.plr5.brdb(
+						md-flex-xsmall="100", 
+						md-flex-small="70", 
+						md-flex-medium="80", 
+						md-flex-large="80", 
+						md-flex-xlarge="90", 
+						md-align="start"
+					)
+						| {{itm.email}}
+
+				//Nickname
+				md-layout(md-flex="100")
+					md-layout.plr5(
+						md-flex-xsmall="100", 
+						md-flex-small="30", 
+						md-flex-medium="20", 
+						md-flex-large="20", 
+						md-flex-xlarge="10", 
+						md-align-xsmall="start",
+						md-align-small="end",
+						md-align-medium="end",
+						md-align-large="end",
+						md-align-xlarge="end",
+					)
+						b {{$t('nick')}}
+					md-layout.plr5.brdb(
+						md-flex-xsmall="100", 
+						md-flex-small="70", 
+						md-flex-medium="80", 
+						md-flex-large="80", 
+						md-flex-xlarge="90", 
+						md-align="start"
+					)
+						| {{itm.nick}}
+
+				//First name
+				md-layout(md-flex="100")
+					md-layout.plr5(
+						md-flex-xsmall="100", 
+						md-flex-small="30", 
+						md-flex-medium="20", 
+						md-flex-large="20", 
+						md-flex-xlarge="10", 
+						md-align-xsmall="start",
+						md-align-small="end",
+						md-align-medium="end",
+						md-align-large="end",
+						md-align-xlarge="end",
+					)
+						b {{$t('first_name')}}
+					md-layout.plr5.brdb(
+						md-flex-xsmall="100", 
+						md-flex-small="70", 
+						md-flex-medium="80", 
+						md-flex-large="80", 
+						md-flex-xlarge="90", 
+						md-align="start"
+					)
+						| {{itm.fname}}
+
+				//Middle name
+				md-layout(md-flex="100")
+					md-layout.plr5(
+						md-flex-xsmall="100", 
+						md-flex-small="30", 
+						md-flex-medium="20", 
+						md-flex-large="20", 
+						md-flex-xlarge="10", 
+						md-align-xsmall="start",
+						md-align-small="end",
+						md-align-medium="end",
+						md-align-large="end",
+						md-align-xlarge="end",
+					)
+						b {{$t('middle_name')}}
+					md-layout.plr5.brdb(
+						md-flex-xsmall="100", 
+						md-flex-small="70", 
+						md-flex-medium="80", 
+						md-flex-large="80", 
+						md-flex-xlarge="90", 
+						md-align="start"
+					)
+						| {{itm.mname}}
+
+				//Last name
+				md-layout(md-flex="100")
+					md-layout.plr5(
+						md-flex-xsmall="100", 
+						md-flex-small="30", 
+						md-flex-medium="20", 
+						md-flex-large="20", 
+						md-flex-xlarge="10", 
+						md-align-xsmall="start",
+						md-align-small="end",
+						md-align-medium="end",
+						md-align-large="end",
+						md-align-xlarge="end",
+					)
+						b {{$t('last_name')}}
+					md-layout.plr5.brdb(
+						md-flex-xsmall="100", 
+						md-flex-small="70", 
+						md-flex-medium="80", 
+						md-flex-large="80", 
+						md-flex-xlarge="90", 
+						md-align="start"
+					)
+						| {{itm.lname}}
+
+				//Site
+				md-layout(md-flex="100")
+					md-layout.plr5(
+						md-flex-xsmall="100", 
+						md-flex-small="30", 
+						md-flex-medium="20", 
+						md-flex-large="20", 
+						md-flex-xlarge="10", 
+						md-align-xsmall="start",
+						md-align-small="end",
+						md-align-medium="end",
+						md-align-large="end",
+						md-align-xlarge="end",
+					)
+						b {{$t('site')}}
+					md-layout.plr5.brdb(
+						md-flex-xsmall="100", 
+						md-flex-small="70", 
+						md-flex-medium="80", 
+						md-flex-large="80", 
+						md-flex-xlarge="90", 
+						md-align="start"
+					)
+						| {{itm.site}}
+
+				//Phone
+				md-layout(md-flex="100")
+					md-layout.plr5(
+						md-flex-xsmall="100", 
+						md-flex-small="30", 
+						md-flex-medium="20", 
+						md-flex-large="20", 
+						md-flex-xlarge="10", 
+						md-align-xsmall="start",
+						md-align-small="end",
+						md-align-medium="end",
+						md-align-large="end",
+						md-align-xlarge="end",
+					)
+						b {{$t('phone')}}
+					md-layout.plr5.brdb(
+						md-flex-xsmall="100", 
+						md-flex-small="70", 
+						md-flex-medium="80", 
+						md-flex-large="80", 
+						md-flex-xlarge="90", 
+						md-align="start"
+					)
+						| {{itm.phone}}
+
+				//Priveleges
+				md-layout(md-flex="100")
+					md-layout.plr5(
+						md-flex-xsmall="100", 
+						md-flex-small="30", 
+						md-flex-medium="20", 
+						md-flex-large="20", 
+						md-flex-xlarge="10", 
+						md-align-xsmall="start",
+						md-align-small="end",
+						md-align-medium="end",
+						md-align-large="end",
+						md-align-xlarge="end",
+					)
+						b {{$t('Privilege')}}
+					md-layout.plr5.brdb(
+						md-flex-xsmall="100", 
+						md-flex-small="70", 
+						md-flex-medium="80", 
+						md-flex-large="80", 
+						md-flex-xlarge="90", 
+						md-align="start"
+					)
+						privelege(:privelege="itm.privlgs")
+
+				//User status blocked/unblocked
+				md-layout(md-flex="100")
+					md-layout.plr5(
+						md-flex-xsmall="100", 
+						md-flex-small="30", 
+						md-flex-medium="20", 
+						md-flex-large="20", 
+						md-flex-xlarge="10", 
+						md-align-xsmall="start",
+						md-align-small="end",
+						md-align-medium="end",
+						md-align-large="end",
+						md-align-xlarge="end",
+					)
+						b {{$t('Status')}}
+					md-layout.plr5.brdb(
+						md-flex-xsmall="100", 
+						md-flex-small="70", 
+						md-flex-medium="80", 
+						md-flex-large="80", 
+						md-flex-xlarge="90", 
+						md-align="start",
+					)
+						| {{itm.isBlocked?$t('blocked'):$t('active')}}
+
+				//Manage buttons
+				md-layout.pad5(md-flex="100", md-align="end")
+
+					//Access rights button
+					md-button.md-icon-button.md-raised(
+						:title="$t('User_privelege')",
+						@click="showEditPrivOneDlg(itm)"
+					)
+						md-icon.icon-gray settings
+					
+					//User block button
+					md-button.md-icon-button.md-raised(
+						:title="$t('Block_user')",
+						@click="blockUser(itm.id)"
+					)
+						md-icon.icon-gray block
+					
+					//Edit user button
+					md-button.md-icon-button.md-raised(
+						:title="$t('User_edit')",
+						@click="showEditUserDlg(itm)"
+					)
+						md-icon.icon-gray create
+					
+					//Remove user button
+					md-button.md-icon-button.md-raised(
+						:title="$t('User_remove')",
+						@click="removeUser(itm.id)"
+					)
+						md-icon.icon-gray close
+
+				md-layout.brdb(md-flex="100")

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <title>
+            <?php
+            if($status==1)
+                print($Enter_new_password);
+            else
+                print($Error);
+            ?>
+        </title>
+    </head>
+    <body>
+      <?php if($status==1 && $resetid!="") { ?>
+        <!--div style="width:100%;padding-left:50%;position:relative;"-->
+          <div style="width:250px;margin-left:125px;">
+            <h3><?php echo $Enter_new_password; ?></h3>
+            <form action="/savepass" method="POST">
+              <input type="hidden" name="id" value="<?php echo $resetid; ?>">
+              <div style="width:100%;">
+                <div style="width:250px;"><?php echo $Password; ?>:</div>
+                <div style="width:250px;">
+                  <input type="password" name="pass1" value="" style="width:100%;">
+                </div>
+              </div>
+              <br>
+              <div style="width:100%;">
+                <div style="width:250px;"><?php echo $Repeat_password; ?>:</div>
+                <div style="width:250px;">
+                  <input type="password" name="pass2" value="" style="width:100%;">
+                </div>
+              </div>
+              <br>
+              <div style="width:250px;text-align:right;">
+                <input type="submit" value="<?php echo $Save;?>" style="font-size:16pt;">
+              </div>
+            </form>
+          </div>
+        <!--/div-->
+      <?php }?>
+    </body>
+</html>

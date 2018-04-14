@@ -1,0 +1,18 @@
+md-list.md-dense.w100.mlr0.brdb.categorylist-bg
+    md-list-item.brdb.my-clickable(
+        v-for="itm in $store.getters.getAllCategories",
+        :key="itm.id",
+        @click="goToCategory(itm.id)",
+        :class="{'itm-active':\
+                (   $route.params.id!==undefined && \
+                    itm.id==$route.params.id\
+                )}",
+        :style="{'padding-left':\
+                (!$store.getters.getSettings.CATEGORIES_TREE_LPANEL\
+                    ?0\
+                    :(itm.lvl*5))+'px'}"
+    )
+        md-layout(md-flex="90")
+            | {{itm["name_"+getContentLang]}}
+        md-layout(md-flex="10")
+            md-icon chevron_right

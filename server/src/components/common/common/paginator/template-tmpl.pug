@@ -1,0 +1,50 @@
+md-layout.ptb5(
+	md-flex="100", 
+	md-align="end", 
+	md-align-xsmall="center",
+	v-if="(itemsCount/itemsPerPage)>1"
+)
+	md-button.md-raised.md-icon-button(
+		v-if="pgCount>3", 
+		@click="gotoFirstPage"
+	)
+		md-icon first_page
+	md-button.md-raised.md-icon-button(
+		v-if="pgCount>1", 
+		@click="gotoPrevPage"
+	)
+		md-icon navigate_before
+
+	md-button.md-raised.md-icon-button(
+		v-for="(n,index) in pages", 
+		:key="n",
+		:class="{'md-primary':n==activePage}",
+		@click="gotoPage(n)",
+		v-if="	(index==0 && pgCount>0) ||\
+				(index==1 && pgCount>1) ||\
+				(index==2 && pgCount>2)"
+	)
+		b {{n}}
+	md-button.md-raised.md-icon-button(
+		v-if="pgCount>1", 
+		@click="gotoNextPage"
+	)
+		md-icon navigate_next
+	md-button.md-raised.md-icon-button(
+		v-if="pgCount>3", 
+		@click="gotoLastPage"
+	)
+		md-icon last_page
+	.ptb5.my-hide-xsmall
+		.page-container
+			button.page-go(
+				type="button", 
+				@click="gotoPageNum()"
+			)
+				| {{$t('GotoPage')}}
+			input.page-input(
+				type="number", 
+				min="1", 
+				:max="pgCount", 
+				v-model="pageNum"					
+			)

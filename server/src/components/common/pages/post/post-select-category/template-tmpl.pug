@@ -1,0 +1,80 @@
+md-layout.brdb.brdt(md-flex="100")
+    md-layout.pad15(md-flex="100")
+        md-layout.dlg.pad15(md-flex="100")
+            md-layout.brdb(md-flex="100", md-align="center")
+                h3.ac
+                    | {{$t('Select_category_of_posts')}}
+            
+            //Breadcrumbs categories
+            md-layout(md-align="start", md-vertical-align="center")
+                span.mr5(
+                    v-for="(itm,index) in getPostsCategoriesBreadcrumb", 
+                    :key="itm.id"
+                )
+                    //Category name
+                    a(href="#", @click.prevent="enterCategory(itm)")
+                        span.md-primary.fnt12
+                            | {{itm['name_'+getContentLang]}}
+                            span(v-if="itm.id!=getPostCategoriyActiveID")
+                                | &rsaquo;
+                    span.md-primary
+                        .fnt14.bld 
+                            | &nbsp;
+
+            //Content language selector
+            md-layout(
+                md-flex="50", 
+                md-align="end", 
+                md-flex-offset="50",
+                v-show="getLangsContentSelected.length>1"
+            )
+                select-content-language
+
+            //Paginator
+            md-layout(md-flex="100", md-align="end")
+                paginator.brdb(
+                    :onChange="(pgNum)=>$store.dispatch(\
+                        'setPostCategoriesPageNum',pgNum)", 
+                    :itemsCount="getCategoriesItemsCountForPost", 
+                    :itemsPerPage="getCategoriesItemsPerPage"
+                )
+
+            //Categories list
+            md-list.w100
+                md-list-item(
+                    v-for="itm in getPostCategories", 
+                    :key="itm.id"
+                )
+                    md-layout(md-flex="100", md-vertical-align="start")
+                        
+                        //Category radio check
+                        md-layout(md-flex="10", md-vertical-align="start")
+                            md-radio(
+                                v-model="selectedCategoryID", 
+                                :md-value="itm.id"
+                            )
+                        
+                        //Category name
+                        md-layout(md-flex="80", md-vertical-align="start")
+                            label.lh40 {{itm["name_"+getContentLang]}}
+                        
+                        //Enter category button
+                        md-layout(
+                            md-flex="10", 
+                            md-vertical-align="start", 
+                            md-align="end"
+                        )
+                            md-button.md-icon-button.md-list-action.md-raised(
+                                :title="$t('Enter_category')",
+                                @click="enterCategory(itm)",
+                                v-show="itm.hasChildred"
+                            )
+                                md-icon.icon-gray chevron_right
+                            md-divider.md-inset
+
+            //Buttons OK/Cancel
+            md-layout.pad5(md-flex="100", md-align="end")
+                md-button.md-raised(@click="closeFn")
+                    | {{$t('Cancel')}}
+                md-button.md-raised.md-primary(@click="selectCategory")
+                    | Ok

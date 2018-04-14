@@ -1,0 +1,74 @@
+.flex-menu
+
+    //Show toggle categories button for phone view
+    .plr5.my-show-xsmall.menu-clickable(
+        @click="toggleCat"
+    )
+        md-icon dehaze
+
+    //Logo
+    .plr5.my-hide-xsmall
+        img.logo-clent(src="/static/logo.png")
+
+    //Home page
+    .plr5.menu-clickable.brdl.active(@click="goToHome")
+        md-icon home
+        b.plr5 &nbsp;{{$t('CL_Main')}}
+
+    //Last categories
+    .plr5.my-hide-xsmall.menu-clickable.brdl(
+        v-for="itm in getMenuCategories",
+        :key="itm.id",
+        @click="goToCategory(itm.id)",
+        v-if="getSettings.CATEGORIES_ENABLE"
+    ) 
+        b.plr5 {{itm['name_'+getContentLang]}}
+
+    //Show toggle categories button for desktop and pad
+    div(
+        @click="toggleCat",
+        v-if="getSettings.CATEGORIES_ENABLE",
+        :class="[   'my-hide-xlarge',\
+                    'my-hide-large',\
+                    'my-hide-medium',\
+                    'plr5',\
+                    'menu-clickable',\
+                    'brdl',\
+                    'brdr',\
+                ]"
+    )
+        md-icon more_horiz
+    
+    
+    .thik
+    
+    //Toggle language
+    .plr5.brdl.menu-clickable(
+        @click="toggleLang",
+        v-if="getSettings.LANGS_SHOW_SWITCHER"
+    )
+        flag.mr5.icn-lng(:iso="getContentLangFull.icon")
+            | {{ $t(getContentLangFull.name) }}
+        
+    //Toggle Search panel
+    .plr5.menu-clickable.brdl(
+        @click="()=>{this.$store.dispatch('toggleSearchPanel',-1);}",
+        :placeholder="$t('CL_Search')"
+    )
+        md-icon search
+    
+    //Login link
+    .plr5.menu-clickable.brdl(
+        v-if="isShowLogin",
+        @click="goAuthPage",
+        :title="$t('CL_Enter')"
+    )
+        md-icon input
+    
+    //Logout link
+    .plr5.menu-clickable.brdl(
+        v-if="isShowLogout",
+        @click="logoutToAuthPage",
+        :title="$t('CL_Logout')"
+    )
+        md-icon exit_to_app

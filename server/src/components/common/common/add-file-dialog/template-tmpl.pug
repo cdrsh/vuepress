@@ -1,0 +1,133 @@
+//Add image
+md-layout(md-flex="100")
+    .add-image-dlg
+        .ac.brdb
+            h3 {{$t('Add_Image')}}
+        md-button-toggle.md-primary(md-single="")
+            md-button(@click="setTab(1)", :class="{'md-toggle':tabs==1}")
+                md-icon file_upload
+                br
+                | {{$t('Local_file').toUpperCase()}}
+            md-button(@click="setTab(2)", :class="{'md-toggle':tabs==2}")
+                md-icon link
+                br
+                | {{$t('FromInternet').toUpperCase()}}
+            md-button(@click="setTab(3)", :class="{'md-toggle':tabs==3}")
+                md-icon storage
+                br
+                | {{$t('FromMediaStore').toUpperCase()}}
+
+        md-layout.pad15(md-flex="100")
+            //Local file
+            md-layout(md-flex="100", v-show="tabs==1")
+                //Select file
+                md-input-container
+                    label {{$t('Select_file')}}
+                    md-file(
+                        v-model="uploadImageAdd", 
+                        @selected="onFileSelect"
+                    )
+                
+                //Title file
+                md-input-container
+                    label
+                        | {{$t('Title')}}
+                    md-input(
+                        type="text",
+                        :placeholder="$t('Title')",
+                        v-model="localFile.title",
+                        name="Title", 
+                        v-validate="'required'", 
+                        data-vv-delay="1000", 
+                        :class="{   'input':true,\
+                                    'is-danger':errors.has('Title') }",
+                    )
+                    md-layout.c-red(
+                        v-show="errors.has('Title')", 
+                        column="", 
+                        md-align="end") 
+                        | {{ errors.first('Title') }}
+
+                //Image width
+                md-input-container
+                    label
+                        | {{$t('Image_width')}}
+                    md-input(v-model="localFile.szw")
+            
+                //Image height
+                md-input-container
+                    label
+                        | {{$t('Image_height')}}
+                    md-input(v-model="localFile.szh")
+
+            //File from internet
+            md-layout(md-flex="100", v-show="tabs==2")
+                form.w100(novalidate, @submit.stop.prevent="submit")
+
+                    //File link
+                    md-input-container
+                        label
+                            | {{$t('Link')}}
+                        md-input(
+                            type="text",
+                            :placeholder="$t('Link')",
+                            v-model="internetFile.lnk",
+                            name="Link", 
+                            v-validate="'required'", 
+                            data-vv-delay="1000", 
+                            :class="{   'input': true,\
+                                        'is-danger': errors.has('Link') }",
+                        )
+                        md-layout.c-red(
+                            v-show="errors.has('Link')", 
+                            column="", 
+                            md-align="end") 
+                            | {{ errors.first('Link') }}
+
+                    //File title
+                    md-input-container
+                        label
+                            | {{$t('Title')}}
+                        md-input(
+                            type="text",
+                            :placeholder="$t('Title')",
+                            v-model="internetFile.title",
+                            name="Title Link", 
+                            v-validate="'required'", 
+                            data-vv-delay="1000", 
+                            :class="{   'input': true,\
+                                        'is-danger':errors.has('Title Link')}",
+                        )
+                        md-layout.c-red(
+                            v-show="errors.has('Title Link')", 
+                            column="", 
+                            md-align="end") 
+                            | {{ errors.first('Title Link') }}
+
+                    //Image width
+                    md-input-container
+                        label
+                            | {{$t('Image_width')}}
+                        md-input(v-model="internetFile.szw")
+                    
+                    //Image height
+                    md-input-container
+                        label
+                            | {{$t('Image_height')}}
+                        md-input(v-model="internetFile.szh")
+
+            //File from store
+            md-layout(md-flex="100", v-show="tabs==3")
+                media-store-list(
+                    :onSelectImagesInStore="onSelectImagesInStore", 
+                    :onDeleteImage="onDeleteImage"
+                )
+
+            //Add/Cancel button
+            md-layout(md-flex="100", md-align="center")
+                md-button.md-raised(@click="closeImageAddDlg")
+                    | {{$t('Cancel')}}
+                md-button.md-raised.md-primary(@click="selectImages")
+                    | {{$t('Add')}}
+            md-layout(md-flex="100", md-align="center")
+                | &nbsp;

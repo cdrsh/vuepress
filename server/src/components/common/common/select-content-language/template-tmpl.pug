@@ -1,0 +1,9 @@
+md-input-container
+    label
+        | {{$t('Content_language')}}
+    md-select(v-model="contentLang")
+        md-option(
+            v-for="itm in $store.getters.getLangsContentSelected",
+            :key="itm.code",
+            :value="itm.code"
+        ) {{$t(itm.name)}}

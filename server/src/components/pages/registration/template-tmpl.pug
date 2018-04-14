@@ -1,0 +1,214 @@
+md-layout.register.pad5(md-flex="100")
+	//Индикатор регистрации
+	md-layout(
+			md-flex="100", 
+			md-align="center", 
+			v-show="$store.getters.getRegistrationIndicator"
+	)
+			md-layout(md-flex="100", md-align="center")
+					h2 {{$t('registration')}}...
+			md-layout(md-flex="100", md-align="center")
+					md-spinner(:md-size="150", md-indeterminate="")
+
+
+	md-layout(
+		md-flex="100",
+		v-show="!$store.getters.getRegistrationIndicator"
+	)
+
+		md-layout(md-flex="100")
+			md-layout(
+				md-flex-xsmall="0",
+				md-flex-small="10",
+				md-flex-medium="20",
+				md-flex-large="30",
+				md-flex-xlarge="30",
+			)
+			md-layout(
+				md-flex-xsmall="100",
+				md-flex-small="80",
+				md-flex-medium="60",
+				md-flex-large="40",
+				md-flex-xlarge="40",
+			)
+				h1.ac.w100
+					| {{ $t('registration') }}
+
+
+				form.w100(novalidate="", @submit.stop.prevent="submit")
+
+					md-input-container
+						label
+							| {{ $t('email') }}
+						md-input(
+							v-model="addUser.email",
+							name="email", 
+							v-validate="'required|email'", 
+							data-vv-delay="1000", 
+							:class="{'input': true, 'is-danger': errors.has('email') }",
+							type="text",
+							:placeholder="$t('email')"
+						)
+					md-layout.c-red(
+						v-show="errors.has('email')", 
+						column="", 
+						md-align="end") 
+						| {{ errors.first('email') }}
+						br 
+						| &nbsp;
+
+
+					md-input-container
+						label
+							| {{ $t('password') }}
+						md-input(
+							type="password",
+							v-model="addUser.pass",
+							name="pass", 
+							v-validate="'required|confirmed:pass2|min:8'", 
+							data-vv-delay="1000", 
+							:class="{'input': true, 'is-danger': errors.has('pass')}",
+							:placeholder="$t('password')"
+						)
+					md-layout.c-red(
+						v-show="errors.has('pass')", 
+						column="", 
+						md-align="end") 
+						| {{ errors.first('pass') }}
+						br 
+						| &nbsp;
+
+
+					md-input-container
+						label
+							| {{ $t('password_repeat') }}
+						md-input(
+							type="password",
+							v-model="addUser.pass2",
+							name="pass2", 
+							v-validate="'required|min:8'", 
+							data-vv-delay="1000", 
+							:class="{'input': true, 'is-danger': errors.has('pass2')}",
+							:placeholder="$t('password')"
+						)
+					md-layout.c-red(
+						v-show="errors.has('pass2')", 
+						column="", 
+						md-align="end") 
+						| {{ errors.first('pass2') }}
+						br 
+						| &nbsp;
+
+
+					md-input-container
+						label
+							| {{ $t('first_name') }}
+						md-input(
+							type="text",
+							v-model="addUser.fname",
+							name="fname", 
+							v-validate="'required'", 
+							data-vv-delay="1000", 
+							:class="{'input': true, 'is-danger': errors.has('fname') }",
+							:placeholder="$t('first_name')",
+						)
+					md-layout.c-red(
+						v-show="errors.has('fname')", 
+						column="", 
+						md-align="end") 
+						| {{ errors.first('fname') }}
+						br 
+						| &nbsp;
+
+
+					md-input-container
+						label
+							| {{ $t('middle_name') }}
+						md-input(
+							type="text",
+							v-model="addUser.mname",
+							name="mname", 
+							:placeholder="$t('middle_name')",
+						)
+
+					md-input-container
+						label
+							| {{ $t('last_name') }}
+						md-input(
+							type="text",
+							v-model="addUser.lname",
+							name="lname", 
+							:placeholder="$t('last_name')"
+						)
+
+
+					md-input-container
+						label
+							| {{ $t('nick') }}
+						md-input(
+							type="text",
+							v-model="addUser.nick",
+							name="nick", 
+							v-validate="'required'", 
+							data-vv-delay="1000", 
+							:class="{'input': true, 'is-danger': errors.has('nick') }",
+							:placeholder="$t('nick')"
+						)
+					md-layout.c-red(
+						v-show="errors.has('nick')", 
+						column="", 
+						md-align="end") 
+						| {{ errors.first('nick') }}
+						br 
+						| &nbsp;
+
+
+					md-input-container
+						label
+							| {{ $t('phone') }}
+						md-input(
+							type="text",
+							v-model="addUser.phone",
+							name="phone", 
+							:placeholder="$t('phone')"
+						)
+
+
+					md-layout
+						label.lin-height
+							| {{ $t('user_icon') }}:
+						div
+							avatar(:txt='avatarName()', size=10)
+					
+
+					md-input-container
+						label
+							| {{ $t('site') }}
+						md-input(
+							type="text",
+							v-model="addUser.site",
+							name="site", 
+							:placeholder="$t('site')"
+						)
+
+
+					md-layout(md-align="end")
+						router-link(to="/auth")
+							md-button.md-raised
+								| {{ $t('back') }}
+						md-button.md-raised.md-primary(@click="register")
+							| {{ $t('register') }}
+
+
+		//icons select panel
+		md-sidenav.md-left(ref="iconsSidenav")
+			md-layout.sidebar-item-nav(
+				md-column="", 
+				md-vertical-align="stretch",
+				v-for="itm in $store.getters.getIcons",
+				:key="itm.id"
+			)
+				div.noselect(@click="setIcon(itm)")
+					md-icon.mr15
+						| {{itm.icon}}
+					| {{itm.icon}}

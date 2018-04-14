@@ -1,0 +1,87 @@
+.auth {
+	/*margin-top: 100px;*/
+	max-height: 400px;
+}
+
+.auth-top {
+	margin-top: 100px;
+}
+
+.auth form {
+	border: 1px solid #CCCCCC;
+	border-radius: 5px;
+	padding: 25px;
+}
+
+.sidebar-item-nav {
+	color: #3366FF;
+	border-bottom: 1px solid darkgray;
+	position:relative;
+}
+
+.sidebar-item-nav .active{
+	border:3px dashed #3366FF;
+}
+
+
+.sidebar-item-nav>div {
+	left:0;
+	top:0;
+	width:100%;
+	height:100%;
+	padding: 15px;
+	line-height: 20px;
+	vertical-align: middle;
+}
+
+.sidebar-item-nav>div>span {
+	font-size:20px;
+	margin-right:15px;
+	box-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+
+.sidebar-item-nav>div:hover {
+	background-color:#3366FF;
+	color:white;
+	cursor:pointer;
+}
+
+.noselect {
+	-webkit-touch-callout: none;
+	  -webkit-user-select: none;
+	   -khtml-user-select: none;
+		 -moz-user-select: none;
+		  -ms-user-select: none;
+			  user-select: none;
+}
+
+.icn-lng {
+	font-size:20px;
+	box-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+
+.fnt12 {
+	font-size:12pt !important;
+}
+
+.c-red {
+	color: red;
+}
+
+.auth h1,
+.auth h2,
+.auth h4,
+.auth h5,
+.auth h6 {
+    color: #777777 !important;
+}
+
+.auth-bg {
+	/*height:100% !important;*/
+	background-color: #F5F5DC;
+}
+
+.register-btn {
+	background-color: #3949ab !important;
+	color:white !important;
+}

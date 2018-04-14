@@ -1,0 +1,18 @@
+md-layout(md-flex="100")
+	//Title item
+	md-layout.brdb(md-flex="100",md-align="center")
+		div.md-subheading {{title}}
+
+	md-layout(md-flex="100")
+		md-list.md-dense.w100
+			md-list-item(
+				v-for="itm in list",
+				v-bind:key="itm.id",
+				@click.prevent="onSelectItemList(itm)",
+				:style="{	'background-color':\
+							(selectedId==itm.id)?activeClr:'inherit'}"
+			)
+				md-icon.mr5(v-if="iconAlign=='left'") {{itm.icon}}
+				span {{itm.txt}}
+				md-icon.mr5(v-if="iconAlign=='right'") {{itm.icon}}
+				md-divider

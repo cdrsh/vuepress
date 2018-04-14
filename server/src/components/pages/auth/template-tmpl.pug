@@ -1,0 +1,122 @@
+md-layout.pad5(md-flex="100")
+
+	//Load indicator
+	md-layout.pad15(
+		md-flex="100", 
+		md-align="center", 
+		v-if="$store.getters.getLoginIndicator"
+	)
+		md-layout(md-flex="100", md-align="center")
+			h2 {{$t('enter')}}...
+		md-layout(md-flex="100", md-align="center")
+			md-spinner(:md-size="150", md-indeterminate="")
+
+	md-layout(md-flex="100", v-show="!$store.getters.getLoginIndicator")
+		md-layout(md-flex="100")
+			md-layout(
+				md-flex-xsmall="0",
+				md-flex-small="10",
+				md-flex-medium="20",
+				md-flex-large="30",
+				md-flex-xlarge="30",
+			)
+			md-layout.auth(
+				md-flex-xsmall="100",
+				md-flex-small="80",
+				md-flex-medium="60",
+				md-flex-large="40",
+				md-flex-xlarge="40",
+			)
+				//Title dialog
+				h1.ac.w100
+					| {{ $t('authentication') }}
+				
+				form.w100(novalidate="", @submit.stop.prevent="submit")
+
+					//Email
+					md-input-container
+						label
+							| {{ $t('email') }}
+						md-input(
+							v-model="user.email",
+							name="email", 
+							v-validate="'required|email'", 
+							data-vv-delay="1000", 
+							:class="{'input': true, 'is-danger': errors.has('email') }",
+							type="text",
+							:placeholder="($t('email')==undefined)?$t('email'):''"
+						)
+					md-layout.c-red(
+						v-show="errors.has('email')", 
+						column="", 
+						md-align="end") 
+						| {{ errors.first('email') }}
+						br 
+						| &nbsp;
+					
+					//Password
+					md-input-container
+						label
+							| {{ $t('password') }}
+						md-input(
+							type="password",
+							v-model="user.password",
+							name="password", 
+							v-validate="'required'", 
+							data-vv-delay="1000", 
+							:class="{'input': true, 'is-danger': errors.has('password') }",
+							:placeholder="($t('password')==undefined)?$t('password'):''"
+						)
+					md-layout.c-red(
+						v-show="errors.has('password')", 
+						column="", 
+						md-align="end") 
+						| {{ errors.first('password') }}
+						br 
+						| &nbsp;
+					
+					//
+						md-checkbox.md-primary(v-model="user.remember") 
+							| {{ $t('rememberme') }}
+
+					//Forgot password link
+					//md-layout.brdt(md-align="end")
+					md-layout(md-align="end")
+						md-toolbar.md-transparent.w100
+							md-layout(md-align="start")
+								router-link.md-title.fnt12(to="/forgot", style="flex:1")
+									span.md-primary
+										| {{ $t('forgot_password') }}
+							
+							//Login button
+							md-button.md-raised.md-primary(@click="login")
+								| {{ $t('enter') }}
+
+					//Language select
+					md-layout.pt(md-align="end")
+						a.mr15.fnt12(@click.prevent="toggleLangPanel", href="#")
+							flag.mr5.icn-lng(:iso="langsCur.icon")
+							| {{ $t(langsCur.name) }}
+
+				//Registation button
+				div.ac.w100
+					router-link.md-button.md-raised(to="/register")
+						H3 {{ $t('registration') }}
+
+
+		//Language select panel
+		md-sidenav.md-left(ref="leftSidenav")
+			md-layout.sidebar-item-nav(
+				md-column="", 
+				md-vertical-align="stretch",
+				v-for="itm in $store.getters.getLangs",
+				:key="itm.id"
+			)
+				//Language name
+				.noselect(
+					@click="setUILang(itm)",
+					v-bind:class="{ active:itm.active }"
+				)
+					flag(:iso="itm.icon")
+					| {{ $t(itm.name) }}
+

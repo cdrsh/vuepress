@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <title>
+            <?php
+            if($status==1)
+                print($Registration_accepted_success);
+            else
+                print($Accept_link_already_used);
+            ?>
+        </title>
+    </head>
+    <body>
+        <h2 align="center" style="color:green">
+            <?php if($status==1) { ?>
+            <?php echo $Registration_accepted_success; ?>,
+            <br>
+            <?php echo $now_you_can_login_with_you_email_and_password;?>
+            <br><br>
+            <div style="text-align:center;">
+                <button 
+                onclick="window.location.href = '<?php echo $http."://".$host.$port; ?>/auth'" 
+                style="font-size:22pt;padding:15px;">
+                <?php echo $Login; ?>
+            </button>
+            </div>
+            <br><br>
+            <div style="text-align:center;">
+                <a href="<?php echo $http."://".$host.$port; ?>/auth">
+                    <?php echo $http."://".$host.$port; ?>/auth
+                </a>
+            </div>
+            <?php } else { ?>
+            <div style="text-align:center;color:red;">
+                <?php echo $Accept_link_already_used; ?>
+            </div>
+            <?php }  ?>
+        </h2>
+    </body>
+</html>

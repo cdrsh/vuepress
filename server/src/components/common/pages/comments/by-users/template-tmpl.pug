@@ -1,0 +1,355 @@
+md-layout(md-flex="100")
+    md-layout(md-flex="100", v-if="!commentOfUserDlg")
+        //Search panel
+        md-layout(md-flex="100", v-if="findDlg")
+            form.w100(novalidate @submit.stop.prevent="submit")
+                md-input-container
+                    //Comment text find
+                    label
+                        | {{$t('Part_text_comment')}}
+                    md-input(
+                        :placeholder="$t('Find_comment')",
+                        v-model="findTxt"
+                    )
+                    //Manage buttons
+                    span.btn-find
+                        //Find button
+                        md-button.md-raised.btn-nospace(@click="findComment")
+                            md-icon search
+                            | {{$t('Search')}}
+                        
+                        //Reset find button
+                        md-button.md-raised.btn-nospace(@click="resetFind")
+                            md-icon replay
+                        
+                        //Close find button
+                        md-button.md-raised.btn-nospace(@click="closeFind")
+                            md-icon close
+
+
+        
+        md-layout(md-flex="100")
+            //Manage buttons toolbar
+            md-layout(
+                md-flex-xsmall="100",
+                md-flex-small="100",
+                md-flex-medium="100",
+                md-flex-large="50",
+                md-flex-xlarge="50",
+                md-align-xsmall="center",
+                md-align-small="center",
+                md-align-medium="start",
+                md-align-large="start",
+                md-align-xlarge="start"
+            )
+                //Remove comments of checked users
+                md-button.h40.md-raised.md-primary(
+                    @click="removeCommentsOfUsers",
+                    :title="$t('Comments_delete_of_seleceted_users')"
+                )
+                    md-icon close
+                    b &nbsp;{{$t('Remove')}}
+                
+                //Remove comments of checked users
+                md-button.h40.md-raised.md-primary(
+                    @click="blockUsersCheckedComment"
+                )
+                    md-icon block
+                    b &nbsp;{{$t('Block')}}
+                
+                //Search button
+                md-button.h40.md-raised.md-primary(
+                    @click="toggleFindDlg"
+                )
+                    md-icon search
+                    b &nbsp;{{$t('Search')}}
+
+            //Users paginator
+            md-layout(
+                md-flex-xsmall="100",
+                md-flex-small="100",
+                md-flex-medium="100",
+                md-flex-large="50",
+                md-flex-xlarge="50",
+                md-align-xsmall="center",
+                md-align-small="center",
+                md-align-medium="end",
+                md-align-large="end",
+                md-align-xlarge="end"
+            )
+                paginator.brdb(
+                    :onChange="onChangePageByUsers", 
+                    :itemsCount="$store.getters.getByUsersAllItems", 
+                    :itemsPerPage="$store.getters.getAllCommentsItemsPerPage"
+                )
+
+        md-layout.my-divider(md-flex="100")
+            | &nbsp;
+
+
+        //Users list
+        md-layout.comments-list(
+            md-flex="100",
+            v-for="itm in $store.getters.getByUsersItems",
+            :key="itm.id"
+        )
+            //User id
+            md-layout(md-flex="100")
+                md-checkbox(v-model="itmChk", :md-value="itm.id")
+                    | {{itm.id}}
+            
+            md-layout(md-flex="100")
+                //Avatar user
+                md-layout(
+                    md-flex-xsmall="100",
+                    md-flex-small="100",
+                    md-flex-medium="10",
+                    md-flex-large="10",
+                    md-flex-xlarge="5"
+                )
+                    avatar(:txt="itm.uname", size=10)
+                md-layout(
+                    md-flex-xsmall="100",
+                    md-flex-small="100",
+                    md-flex-medium="90",
+                    md-flex-large="90",
+                    md-flex-xlarge="95",
+                )
+                    //Email
+                    md-layout(md-flex="100", v-if="itm.email!=''")
+                        md-layout.plr5(
+                            md-flex-xsmall="100",
+                            md-flex-small="100",
+                            md-flex-medium="20",
+                            md-flex-large="15",
+                            md-flex-xlarge="10",
+                            md-align-xsmall="start",
+                            md-align-small="start",
+                            md-align-medium="end",
+                            md-align-large="end",
+                            md-align-xlarge="end",
+                        )
+                            | {{$t('email')}}: 
+                        md-layout.brdb.plr5(
+                            md-flex-xsmall="100",
+                            md-flex-small="100",
+                            md-flex-medium="80",
+                            md-flex-large="85",
+                            md-flex-xlarge="90",
+                        )
+                            b {{itm.email}}
+
+                    //Nickname
+                    md-layout(md-flex="100", v-if="itm.nick!=''")
+                        md-layout.plr5(
+                            md-flex-xsmall="100",
+                            md-flex-small="100",
+                            md-flex-medium="20",
+                            md-flex-large="15",
+                            md-flex-xlarge="10",
+                            md-align-xsmall="start",
+                            md-align-small="start",
+                            md-align-medium="end",
+                            md-align-large="end",
+                            md-align-xlarge="end",
+                        )
+                            | {{$t('nick')}}:
+                        md-layout.brdb.plr5(
+                            md-flex-xsmall="100",
+                            md-flex-small="100",
+                            md-flex-medium="80",
+                            md-flex-large="85",
+                            md-flex-xlarge="90",
+                        )
+                            b {{itm.nick}}
+
+                    //First name
+                    md-layout(md-flex="100", v-if="itm.fname!=''")
+                        md-layout.plr5(
+                            md-flex-xsmall="100",
+                            md-flex-small="100",
+                            md-flex-medium="20",
+                            md-flex-large="15",
+                            md-flex-xlarge="10",
+                            md-align-xsmall="start",
+                            md-align-small="start",
+                            md-align-medium="end",
+                            md-align-large="end",
+                            md-align-xlarge="end",
+                        )
+                            | {{$t('first_name')}}:
+                        md-layout.brdb.plr5(
+                            md-flex-xsmall="100",
+                            md-flex-small="100",
+                            md-flex-medium="80",
+                            md-flex-large="85",
+                            md-flex-xlarge="90",
+                        )
+                            b {{itm.fname}}
+
+                    //Middle name
+                    md-layout(md-flex="100", v-if="itm.mname!=''")
+                        md-layout.plr5(
+                            md-flex-xsmall="100",
+                            md-flex-small="100",
+                            md-flex-medium="20",
+                            md-flex-large="15",
+                            md-flex-xlarge="10",
+                            md-align-xsmall="start",
+                            md-align-small="start",
+                            md-align-medium="end",
+                            md-align-large="end",
+                            md-align-xlarge="end",
+                        )
+                            | {{$t('middle_name')}}:
+                        md-layout.brdb.plr5(
+                            md-flex-xsmall="100",
+                            md-flex-small="100",
+                            md-flex-medium="80",
+                            md-flex-large="85",
+                            md-flex-xlarge="90",
+                        )
+                            b {{itm.mname}} 
+
+                    //Last name
+                    md-layout(md-flex="100", v-if="itm.lname!=''")
+                        md-layout.plr5(
+                            md-flex-xsmall="100",
+                            md-flex-small="100",
+                            md-flex-medium="20",
+                            md-flex-large="15",
+                            md-flex-xlarge="10",
+                            md-align-xsmall="start",
+                            md-align-small="start",
+                            md-align-medium="end",
+                            md-align-large="end",
+                            md-align-xlarge="end",
+                        )
+                            | {{$t('last_name')}}:
+                        md-layout.brdb.plr5(
+                            md-flex-xsmall="100",
+                            md-flex-small="100",
+                            md-flex-medium="80",
+                            md-flex-large="85",
+                            md-flex-xlarge="90",
+                        )
+                            b {{itm.lname}} 
+
+                    //Phone
+                    md-layout(md-flex="100", v-if="itm.phone!=''")
+                        md-layout.plr5(
+                            md-flex-xsmall="100",
+                            md-flex-small="100",
+                            md-flex-medium="20",
+                            md-flex-large="15",
+                            md-flex-xlarge="10",
+                            md-align-xsmall="start",
+                            md-align-small="start",
+                            md-align-medium="end",
+                            md-align-large="end",
+                            md-align-xlarge="end",
+                        )
+                            | {{$t('phone')}}:
+                        md-layout.brdb.plr5(
+                            md-flex-xsmall="100",
+                            md-flex-small="100",
+                            md-flex-medium="80",
+                            md-flex-large="85",
+                            md-flex-xlarge="90",
+                        )
+                            b {{itm.phone}} 
+
+                    //Website
+                    md-layout(md-flex="100", v-if="itm.site!=''")
+                        md-layout.plr5(
+                            md-flex-xsmall="100",
+                            md-flex-small="100",
+                            md-flex-medium="20",
+                            md-flex-large="15",
+                            md-flex-xlarge="10",
+                            md-align-xsmall="start",
+                            md-align-small="start",
+                            md-align-medium="end",
+                            md-align-large="end",
+                            md-align-xlarge="end",
+                        )
+                            | {{$t('site')}}:
+                        md-layout.brdb.plr5(
+                            md-flex-xsmall="100",
+                            md-flex-small="100",
+                            md-flex-medium="80",
+                            md-flex-large="85",
+                            md-flex-xlarge="90",
+                        )
+                            b {{itm.site}} 
+
+                    //Comments count
+                    md-layout(md-flex="100", v-if="itm.site!=''")
+                        md-layout.plr5(
+                            md-flex-xsmall="100",
+                            md-flex-small="100",
+                            md-flex-medium="20",
+                            md-flex-large="15",
+                            md-flex-xlarge="10",
+                            md-align-xsmall="start",
+                            md-align-small="start",
+                            md-align-medium="end",
+                            md-align-large="end",
+                            md-align-xlarge="end",
+                        )
+                            | {{$t('Comments_count')}}:
+                        md-layout.brdb.plr5(
+                            md-flex-xsmall="100",
+                            md-flex-small="100",
+                            md-flex-medium="80",
+                            md-flex-large="85",
+                            md-flex-xlarge="90",
+                        )
+                            b {{itm.cnt}} 
+
+            //User registration date
+            md-layout(md-flex="100", md-align="end")
+                | {{$t('Registered')}}: {{itm.dt}}
+            
+            //User blocked flag
+            md-layout(
+                md-flex="100", 
+                md-align="end", 
+                v-if="itm.isBlocked", 
+                style="color:red;"
+            )
+                | {{$t('blocked')}}
+            
+            //Manage buttons
+            md-layout(md-flex="100", md-align="center")
+                md-layout(md-flex="100", md-align="end")
+
+                    //Block user
+                    md-button.md-icon-button.md-raised(
+                        :title="$t('Block_user')",
+                        @click="blockUser(itm.id)"
+                    )
+                        md-icon block
+                    
+                    //Remove comments of the current users
+                    md-button.md-icon-button.md-raised(
+                        :title="$t('Remove_comment')",
+                        @click="removeCommentsOfUser(itm.id)"
+                    )
+                        md-icon close
+                    
+                    //Enter users and get comments of the current user
+                    md-button.md-icon-button.md-raised(
+                        :title="$t('All_comments_of_current_user')",
+                        @click="openCommentsOfUser(itm.id, itm.email)"
+                    )
+                        md-icon
+                            | chevron_right
+
+    //Comments of one entered user
+    comments-of-user(
+        v-if="commentOfUserDlg",
+        :email='usr.email',
+        :usrid='usr.usrid',
+        :closeCommentOfUserDlg="closeCommentOfUserDlg"
+    )

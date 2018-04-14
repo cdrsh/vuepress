@@ -1,0 +1,314 @@
+md-layout.pad5(md-flex="100")
+
+	//Load rss indicator
+	md-layout(
+		md-flex="100", 
+		md-align="center", 
+		v-if="$store.getters.getRssIndicatorLoading"
+	)
+		md-layout(md-flex="100", md-align="center")
+			h2 {{$t('Rss_loading')}}...
+		md-layout(md-flex="100", md-align="center")
+			md-spinner(:md-size="150", md-indeterminate="")
+
+	//Remove rss indicator
+	md-layout(
+		md-flex="100", 
+		md-align="center", 
+		v-if="$store.getters.getRssIndicatorRemoving"
+	)
+		md-layout(md-flex="100", md-align="center")
+			h2 {{$t('Rss_removing')}}...
+		md-layout(md-flex="100", md-align="center")
+			md-spinner(:md-size="150", md-indeterminate="")
+
+	//Add rss indicator
+	md-layout(
+		md-flex="100", 
+		md-align="center", 
+		v-if="$store.getters.getRssIndicatorAdding"
+	)
+		md-layout(md-flex="100", md-align="center")
+			h2 {{$t('Rss_adding')}}...
+		md-layout(md-flex="100", md-align="center")
+			md-spinner(:md-size="150", md-indeterminate="")
+
+	//Save rss indicator
+	md-layout(
+		md-flex="100", 
+		md-align="center", 
+		v-if="$store.getters.getRssIndicatorUpdating"
+	)
+		md-layout(md-flex="100", md-align="center")
+			h2 {{$t('Rss_updating')}}...
+		md-layout(md-flex="100", md-align="center")
+			md-spinner(:md-size="150", md-indeterminate="")
+
+
+	md-layout(
+		md-flex="100", 
+		v-show="\
+		!$store.getters.getRssIndicatorLoading && \
+		!$store.getters.getRssIndicatorRemoving && \
+		!$store.getters.getRssIndicatorAdding && \
+		!$store.getters.getRssIndicatorUpdating"
+	)
+		//Add rss panel
+		add-rss(
+			v-if="addRSSDlg", 
+			:closeFn="closeAddRSSDlg"
+		)
+
+		//Edit rss panel
+		edit-rss(
+			v-if="editRSSDlg", 
+			:closeFn="closeEditRSS", 
+			:edObj="edObj"
+		)
+
+		//Rss list
+		md-layout(
+			md-flex="100", 
+			v-show="!addRSSDlg && !editRSSDlg"
+		)
+			//Find rss dialog
+			md-layout(md-flex="100", v-if="findDlg")
+				form.w100(novalidate @submit.stop.prevent="submit")
+					md-input-container
+						//Search rss text
+						label
+							| {{$t('Rss_fragment_header')}}
+						md-input(
+							:placeholder="$t('Rss_title')",
+							v-model="findTxt"
+						)
+
+						//Manage buttons
+						span.btn-find
+
+							//Search rss button
+							md-button.md-raised.btn-nospace(@click="findRSS")
+								md-icon search
+								| {{$t('Search')}}
+							
+							//Reset search
+							md-button.md-raised.btn-nospace(@click="resetFind")
+								md-icon replay
+							
+							//Close search dialog
+							md-button.md-raised.btn-nospace(@click="closeFind")
+								md-icon close
+
+
+			//Manage toolbar buttons 
+			md-layout(md-flex="100")
+				md-layout(
+					md-flex-xsmall="100",
+					md-flex-small="100",
+					md-flex-medium="100",
+					md-flex-large="50",
+					md-flex-xlarge="50",
+					md-align-xsmall="center",
+					md-align-small="start",
+					md-align-medium="start",
+					md-align-large="start",
+					md-align-xlarge="start"
+				)
+					//Add RSS button
+					md-button.h40.md-raised.md-primary(
+						@click="addRSS",
+						:title="$t('Rss_add')"
+					)
+						md-icon add
+						b &nbsp;{{$t('Add')}}
+
+					//Remove checked RSS button
+					md-button.h40.md-raised.md-primary(
+						@click="removeCheckedRSS",
+						:title="$t('Rss_remove')"
+					)
+						md-icon close
+						b &nbsp;{{$t('Remove')}}
+
+					//Toggle search dialog
+					md-button.h40.md-raised.md-primary(
+						@click="toggleFindDlg",
+						:title="$t('Rss_find')"
+					)
+						md-icon search
+						b &nbsp;{{$t('Search')}}
+
+				//Paginator
+				md-layout(
+					md-flex-xsmall="100",
+					md-flex-small="100",
+					md-flex-medium="100",
+					md-flex-large="50",
+					md-flex-xlarge="50",
+					md-align-xsmall="center",
+					md-align-small="center",
+					md-align-medium="end",
+					md-align-large="end",
+					md-align-xlarge="end"
+				)
+					paginator.brdb(
+						:onChange="onChangePage", 
+						:itemsCount="$store.getters.getRssItemsCount",
+						:itemsPerPage="$store.getters.getRssItemsPerPage"
+					)
+
+				//RSS list
+				md-layout.rss-list(
+					md-flex="100",
+					v-for="itm in $store.getters.getRssList",
+					:key="itm.id"
+				)
+					//ID
+					md-layout(md-flex="100")
+						md-checkbox(v-model="itmChk", :md-value="itm.id")
+							b {{itm.id}}
+
+					//Title
+					md-layout(md-flex="100")
+						md-layout.plr5(
+							md-flex-xsmall="100", 
+							md-flex-small="30", 
+							md-flex-medium="20", 
+							md-flex-large="20", 
+							md-flex-xlarge="10", 
+							md-align-xsmall="start",
+							md-align-small="end",
+							md-align-medium="end",
+							md-align-large="end",
+							md-align-xlarge="end",
+						)
+							b {{$t('Title')}}:
+						md-layout.plr5.brdb(
+							md-flex-xsmall="100", 
+							md-flex-small="70", 
+							md-flex-medium="80", 
+							md-flex-large="80", 
+							md-flex-xlarge="90", 
+							md-align="start"
+						)
+							| {{itm.title}}
+
+					//Description
+					md-layout(md-flex="100")
+						md-layout.plr5(
+							md-flex-xsmall="100", 
+							md-flex-small="30", 
+							md-flex-medium="20", 
+							md-flex-large="20", 
+							md-flex-xlarge="10", 
+							md-align-xsmall="start",
+							md-align-small="end",
+							md-align-medium="end",
+							md-align-large="end",
+							md-align-xlarge="end",
+						)
+							b {{$t('Description')}}:
+						md-layout.plr5.brdb(
+							md-flex-xsmall="100", 
+							md-flex-small="70", 
+							md-flex-medium="80", 
+							md-flex-large="80", 
+							md-flex-xlarge="90", 
+							md-align="start"
+						)
+							| {{itm.description}}
+
+					//Link
+					//
+						md-layout(md-flex="100")
+							md-layout.plr5(
+								md-flex-xsmall="100", 
+								md-flex-small="30", 
+								md-flex-medium="20", 
+								md-flex-large="20", 
+								md-flex-xlarge="10", 
+								md-align-xsmall="start",
+								md-align-small="end",
+								md-align-medium="end",
+								md-align-large="end",
+								md-align-xlarge="end",
+							)
+								b {{$t('Link')}}:
+							md-layout.plr5.brdb(
+								md-flex-xsmall="100", 
+								md-flex-small="70", 
+								md-flex-medium="80", 
+								md-flex-large="80", 
+								md-flex-xlarge="90", 
+								md-align="start"
+							)
+								| {{itm.link}}
+
+					//Date
+					md-layout(md-flex="100")
+						md-layout.plr5(
+							md-flex-xsmall="100", 
+							md-flex-small="30", 
+							md-flex-medium="20", 
+							md-flex-large="20", 
+							md-flex-xlarge="10", 
+							md-align-xsmall="start",
+							md-align-small="end",
+							md-align-medium="end",
+							md-align-large="end",
+							md-align-xlarge="end",
+						)
+							b {{$t('Date')}}:
+						md-layout.plr5.brdb(
+							md-flex-xsmall="100", 
+							md-flex-small="70", 
+							md-flex-medium="80", 
+							md-flex-large="80", 
+							md-flex-xlarge="90", 
+							md-align="start"
+						)
+							| {{itm.pubdate}}
+
+					//Categories
+					md-layout(md-flex="100")
+						md-layout.plr5(
+							md-flex-xsmall="100", 
+							md-flex-small="30", 
+							md-flex-medium="20", 
+							md-flex-large="20", 
+							md-flex-xlarge="10", 
+							md-align-xsmall="start",
+							md-align-small="end",
+							md-align-medium="end",
+							md-align-large="end",
+							md-align-xlarge="end",
+						)
+							b {{$t('Category')}}:
+						md-layout.plr5.brdb(
+							md-flex-xsmall="100", 
+							md-flex-small="70", 
+							md-flex-medium="80", 
+							md-flex-large="80", 
+							md-flex-xlarge="90", 
+							md-align="start"
+						)
+							| {{itm.categoryNames}}
+
+					//Manage buttons
+					md-layout.pad5(md-flex="100", md-align="end")
+
+						//Edit RSS button
+						md-button.md-icon-button.md-raised(
+							:title="$t('Rss_one_edit')",
+							@click="editRSS(itm)"
+						)
+							md-icon.icon-gray create
+						
+						//Remove RSS button
+						md-button.md-icon-button.md-raised(
+							:title="$t('Rss_one_remove')",
+							@click="removeRSS(itm.id)"
+						)
+							md-icon.icon-gray close
+
+

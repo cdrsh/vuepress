@@ -1,0 +1,41 @@
+.filter-list {
+    width: 100%;
+}
+
+.filter-list li{
+    border-bottom: 1px solid #CCCCCC;
+    cursor: pointer;
+}
+
+.filter-list li:hover{
+    background-color: #CCCCCC;
+}
+
+.active-cmnt {
+    background-color: #CCCCCC;
+}
+
+.comments-list {
+    border-bottom:1px solid #CCCCCC;
+}
+
+.comments-list>div { 
+    padding-left: 5px;
+    padding-right: 5px;
+    border-left: 1px solid #CCCCCC;
+}
+
+.comments-list>div>div { 
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.input-container-override {
+    margin-top: 0px !important;
+    margin-bottom: 0px !important;
+}
+
+.my-divider {
+    font-size: 4px;
+}
+

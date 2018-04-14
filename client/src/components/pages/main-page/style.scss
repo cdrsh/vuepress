@@ -1,0 +1,279 @@
+.itm-active {
+	background-color: #DDDDDD;
+	color: black !important;
+}
+
+.itm-active>div>div {
+	font-weight: bold !important;
+}
+
+.menu-clickable {
+	position: relative;
+	line-height: 50px;
+}
+
+.menu-clickable:after {
+	position: absolute;
+	left:0;
+	top:0px;
+	width: 100%;
+	height:100%;
+	/*border: 1px solid black;*/
+	content:' ';
+	cursor: pointer;
+}
+
+.menu-clickable:after .active {
+	border-bottom: 1px solid black;
+}
+
+
+.menu-clickable:hover {
+	background-color: #777777;
+	color: white;
+}
+
+.menu-clickable:hover b,
+.menu-clickable:hover i{
+	color: white;
+}
+
+
+.my-clickable {
+	position: relative;
+}
+.my-clickable:after {
+	position: absolute;
+	left:0;
+	top:0px;
+	width: 100%;
+	height:100%;
+	/*border: 1px solid black;*/
+	content:' ';
+	cursor: pointer;
+	
+}
+.my-clickable:hover {
+	background-color: #CCCCCC;
+	/*color: white;*/
+}
+
+
+@media screen and (min-width: 601px) and (max-width: 960px) {
+	.content-w {
+		width: 600px;
+	}
+}
+@media screen and (min-width: 961px) and (max-width: 10000px) {
+	.content-w {
+		width: 960px;
+	}
+}
+
+.flex-container-col {
+	display: flex;
+	flex-direction: column;
+}
+
+.flex-container-row {
+	display: flex;
+	height: 100% !important;
+}
+
+.flex-container-row-center {
+	display: flex;
+	align-items: center;
+}
+
+.flex-menu {
+	display: flex;
+	flex-wrap: wrap;
+	height: 100% !important;
+	color: #444444;
+	align-items:center;
+	border-bottom: 1px solid #CCCCCC;
+
+	background: #cccccc; /* Old browsers */
+	background: -moz-linear-gradient(top, #cccccc 2%, #ffffff 50%, #cccccc 99%); /* FF3.6-15 */
+	background: -webkit-linear-gradient(top, #cccccc 2%,#ffffff 50%,#cccccc 99%); /* Chrome10-25,Safari5.1-6 */
+	background: linear-gradient(to bottom, #cccccc 2%,#ffffff 50%,#cccccc 99%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#cccccc', endColorstr='#cccccc',GradientType=0 ); /* IE6-9 */	
+}
+
+.footer {
+	background-color: #DDDDDD;
+	color: #444444;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+div#app {
+	height: 100% !important;
+}
+
+.wrapper {
+	display: flex;
+	flex-wrap: wrap;
+	height: 100% !important;
+}
+
+.spacer {
+	display: flex;
+	flex-grow: 1;
+}
+
+.thin {
+	flex-grow: 0;
+}
+
+.thik {
+	flex-grow: 1;
+}
+
+
+
+.adv {
+	width: 240px;
+	border-left: 1px solid #CCCCCC;
+	border-right: 1px solid #444444;
+}
+
+.icn-lng {
+	font-size:20px;
+	box-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+
+.logo-clent {
+	width: 40px;
+}
+
+.lpanel-client {
+	overflow-x: hidden;
+}
+
+.header > h1 {
+	font-size: 20pt;
+}
+
+
+.header {
+	height: 70px;
+	background-color:lightgray;
+}
+
+.tineline-col {
+	flex: 0 0 100px;
+	flex-grow: 0;
+	position: relative;
+}
+
+$clr-timeline:#996699;
+
+.bullet {
+	position: absolute;
+	top:0;
+	left:0;
+	width: 100px;
+	height: 50px;
+	background:$clr-timeline;
+	-moz-border-radius: 100px / 50px;
+	-webkit-border-radius: 100px / 50px;
+	border-radius: 100px / 50px;
+	border:5px double white;
+	color: white !important;
+	text-align:center;
+	line-height: 40px;
+	vertical-align: middle;
+}
+
+.triangle-left
+{
+	position: absolute;
+	top:10px;
+	left:-15px;
+	width: 0;
+	height: 0;
+	border-top: 15px solid transparent;
+	border-right: 50px solid $clr-timeline;
+	border-bottom: 15px solid transparent;
+}
+
+.triangle-right
+{
+	position: absolute;
+	top:10px;
+	left:65px;
+	width: 0;
+	height: 0;
+	border-top: 15px solid transparent;
+	border-left: 50px solid $clr-timeline;
+	border-bottom: 15px solid transparent;
+}
+
+.rectang {
+	position: absolute;
+	top:0px;
+	left:45px;
+	width: 10px;
+	height: 100%;
+	background: $clr-timeline;
+}
+
+.thik-basis {
+	flex-basis: 1;
+}
+
+.row-content {
+	min-height: 70px;
+}
+
+.fnt12 {
+	font-size: 12pt;
+}
+
+a.hrf {
+    color: #0099CC !important;
+}
+
+
+
+.shadow {
+	color: #fff;
+	font-family: Arvo;
+	font-weight: bold;
+	text-shadow:
+		-3px -3px 0 #222,
+		3px -3px 0 #222,
+		-3px 3px 0 #222,
+		3px 3px 0 #222,
+		4px 4px 0 #fff,
+		5px 5px 0 #fff,
+		6px 6px 0 #fff,
+		7px 7px 0 #fff;
+	line-height: 0.8em;
+	letter-spacing: 0.1em;
+	transform: scaleY(0.7);
+	-webkit-transform: scaleY(0.7);
+	-moz-transform: scaleY(0.7);
+	margin:0;
+	text-align: center;
+}
+
+.site-title {
+	margin-top:-15px !important;
+	margin-bottom:-15px !important;
+}
+
+
+
+.header2 {
+	text-align: center;
+	font-size: 14pt;
+	color: #1660ff;
+	text-shadow: -1px -1px 0px #1660ff,2px 2px 0px #1010ee;
+}
+
+

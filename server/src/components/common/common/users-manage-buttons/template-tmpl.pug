@@ -1,0 +1,57 @@
+md-layout(md-flex="100")
+	//Desktop view
+	md-layout.md-hide-xsmall.md-hide-small(md-flex="100")
+
+		//Add button
+		md-button.h40.md-raised.md-primary(
+			@click="addFn",
+			:title="$t('Add')"
+		)
+			md-icon add
+			b &nbsp;{{$t('Add')}}
+
+		//Remove button
+		md-button.h40.md-raised.md-primary(
+			@click="removeFn",
+			:title="$t('Remove')"
+		)
+			md-icon close
+			b &nbsp;{{$t('Remove')}}
+
+		//Block button
+		md-button.h40.md-raised.md-primary(
+			@click="blockFn",
+			:title="$t('Block')"
+		)
+			md-icon block
+			b &nbsp;{{$t('Block')}}
+
+		//Privelege button
+		md-button.h40.md-raised.md-primary(
+			@click="settingsFn",
+			:title="$t('Privilege')"
+		)
+			md-icon settings
+			b &nbsp;{{$t('Privilege')}}
+
+		//Search button
+		md-button.h40.md-raised.md-primary(
+			@click="findFn",
+			:title="$t('Search')"
+		)
+			md-icon search
+			b &nbsp;{{$t('Search')}}
+
+	//Phone view
+	md-layout.md-hide-medium-and-up(md-flex="100", md-align="center")
+		span.btn-find
+			md-button.md-raised.btn-nospace(@click="addFn")
+				md-icon add
+			md-button.md-raised.btn-nospace(@click="removeFn")
+				md-icon close
+			md-button.md-raised.btn-nospace(@click="blockFn")
+				md-icon block
+			md-button.md-raised.btn-nospace(@click="settingsFn")
+				md-icon settings
+			md-button.md-raised.btn-nospace(@click="findFn")
+				md-icon search

@@ -1,0 +1,79 @@
+md-layout.mrgn5.pr5.pt5(md-flex="100")
+    //Add category indicator
+    md-layout(
+        md-flex="100", 
+        md-align="center", 
+        v-if="getAddIndicatorCategory"
+    )
+        //Title
+        md-layout(md-flex="100", md-align="center")
+            h2 {{$t('Category_adding')}}...
+        md-layout(md-flex="100", md-align="center")
+            md-spinner(:md-size="150", md-indeterminate="")
+    
+    //Add category visible
+    .edit-category(v-if="!getAddIndicatorCategory")
+        //Title
+        .ac.brdb
+            h3 {{$t('Add_category')}}
+        md-layout(
+            md-flex="100", 
+            v-show="getLangsContentSelected.length>1"
+        )
+            //Button copy to all languages
+            md-layout(
+                md-flex-xsmall="100",
+                md-flex-small="100",
+                md-flex-medium="50",
+                md-flex-large="50",
+                md-flex-xlarge="50",
+                md-align="end"
+            )
+                md-button.md-raised.h25px(@click="onCopyToAllLangs")
+                    | {{$t('Copy_to_All_Languages')}}
+            
+            //Language select
+            md-layout(
+                md-flex-xsmall="100", 
+                md-flex-small="100", 
+                md-flex-medium="50", 
+                md-flex-large="50", 
+                md-flex-xlarge="50",
+                md-align="end", 
+                v-show="getLangsContentSelected.length>1"
+            )
+                select-content-language
+
+        //Category name
+        md-layout(md-flex="100")
+            md-input-container
+                label
+                    | {{$t('Add_category')}}
+                md-input(
+                    type="text",
+                    :placeholder="$t('New_category_name')",
+                    v-model="catObj.name",
+                    name="Category", 
+                )
+
+        //Autonumerate
+        auto-numerate(
+            @autoNumerateChanged="onAutoNumerateChanged"
+            autoNumerateInit="1",
+            orderbyInit="1"
+        )
+
+        //Keywords
+        self-keywords(@selfKeywordsChanged="onSelfKeywordsChanged")
+
+        //User fields
+        user-fields(@userFieldsChanged="onUserFieldsChanged")
+
+        //Add/Close buttons
+        md-layout(md-flex="100", md-align="center")
+            md-button.md-raised(
+                @click="$store.dispatch('onClickAddCategory',false)"
+            )
+                b {{$t('Cancel')}}
+            md-button.md-raised.md-primary(@click="addCategory")
+                b {{$t('Add')}}

@@ -1,0 +1,186 @@
+md-layout.pad5(md-flex="100")
+
+	//Comments Loading indicator
+	md-layout(
+		md-flex="100", 
+		md-align="center", 
+		v-if="	getAllCommentsLoading || \
+				getByUsersLoadIndicator || \
+				getByPostsLoading || \
+				getByCategoriesOneLoading"
+	)
+		md-layout(md-flex="100", md-align="center")
+			h2 {{$t('Comments_loading')}}...
+		md-layout(md-flex="100", md-align="center")
+			md-spinner(:md-size="150", md-indeterminate="")
+
+	//Users block indicator
+	md-layout(
+		md-flex="100", 
+		md-align="center", 
+		v-if="	getAllCommentsUsersBlockIndicator || \
+				getByUsersBlockIndicator || \
+				getByPostsBlocking || \
+				getByOnePostCommentsBlocking || \
+				getByCategoriesOneBlocking"
+	)
+		md-layout(md-flex="100", md-align="center")
+			h2 {{$t('Comments_user_blocking')}}...
+		md-layout(md-flex="100", md-align="center")
+			md-spinner(:md-size="150", md-indeterminate="")
+
+	//Comments remove indicator
+	md-layout(
+		md-flex="100", 
+		md-align="center", 
+		v-if="	getAllCommentsRemoveIndicator || \
+				getByUsersRemoveIndicator || \
+				getByUsersOneCommentRemoveIndicator || \
+				getByCategoriesRemoving || \
+				getByOnePostCommentsRemoving || \
+				getByPostsRemoving"
+	)
+		md-layout(md-flex="100", md-align="center")
+			h2 {{$t('Comments_removing')}}...
+		md-layout(md-flex="100", md-align="center")
+			md-spinner(:md-size="150", md-indeterminate="")
+
+	//Comments save indicator
+	md-layout(
+		md-flex="100", 
+		md-align="center", 
+		v-if="	getAllCommentsSavingIndicator || \
+				getByCategoriesOneSaving"
+	)
+		md-layout(md-flex="100", md-align="center")
+			h2 {{$t('Comments_saving')}}...
+		md-layout(md-flex="100", md-align="center")
+			md-spinner(:md-size="150", md-indeterminate="")
+
+	//Comments find indicator
+	md-layout(
+		md-flex="100", 
+		md-align="center", 
+		v-if="getAllCommentsFindIndicator"
+	)
+		md-layout(md-flex="100", md-align="center")
+			h2 {{$t('Comments_searching')}}...
+		md-layout(md-flex="100", md-align="center")
+			md-spinner(:md-size="150", md-indeterminate="")
+	
+	//Comments load indicator of one user
+	md-layout(
+		md-flex="100", 
+		md-align="center", 
+		v-if="getByUsersLoadOfOneUserIndicator"
+	)
+		md-layout(md-flex="100", md-align="center")
+			h2 {{$t('Comments_user_loading')}}...
+		md-layout(md-flex="100", md-align="center")
+			md-spinner(:md-size="150", md-indeterminate="")
+
+	//Categories loading
+	md-layout(
+		md-flex="100", 
+		md-align="center", 
+		v-if="getByCategoriesLoading"
+	)
+		md-layout(md-flex="100", md-align="center")
+			h2 {{$t('Comments_categories_loading')}}...
+		md-layout(md-flex="100", md-align="center")
+			md-spinner(:md-size="150", md-indeterminate="")
+
+
+
+	md-layout(
+		md-flex="100", 
+		v-show="!getAllCommentsLoading && \
+				!getAllCommentsUsersBlockIndicator && \
+				!getAllCommentsRemoveIndicator && \
+				!getAllCommentsSavingIndicator && \
+				!getAllCommentsFindIndicator && \
+				!getByUsersRemoveIndicator && \
+				!getByUsersBlockIndicator && \
+				!getByUsersLoadOfOneUserIndicator && \
+				!getByUsersOneCommentRemoveIndicator && \
+				!getByPostsLoading && \
+				!getByPostsRemoving && \
+				!getByPostsBlocking && \
+				!getByCategoriesLoading && \
+				!getByCategoriesRemoving && \
+				!getByCategoriesOneLoading && \
+				!getByCategoriesOneBlocking && \
+				!getByCategoriesOneSaving && \
+				!getByOnePostCommentsRemoving && \
+				!getByOnePostCommentsBlocking && \
+				!getByUsersLoadIndicator"
+	)
+		//Edit comment dialog
+		edit-comment(
+			v-show="editCommentDlg",
+			:closeEditDlg="showEditComment"
+		)
+
+		//Type view of comments
+		md-layout(v-show="!editCommentDlg")
+			//phone pad
+			md-layout.my-hide-medium.my-hide-large.my-hide-xlarge(md-flex="100")
+				md-input-container
+					label(for="filterBy") {{$t('Filter_By')}}
+					md-select(v-model="filterBy")
+						md-option(
+							v-for="(itm,index) in commentFilters",
+							v-bind:key="itm.val",
+							:value="itm.val"
+						)
+							| {{$t(itm.txt)}}
+
+			//monitor
+			md-layout.my-hide-xsmall.my-hide-small(md-flex="100", md-align="center")
+
+				//All comments
+				md-button.md-raised.btn-nospace(
+					@click="setCommentFiltersActive('all-comments')",
+					:class="{'md-primary':commentFiltersActive=='all-comments'}"
+				)
+					| {{$t('All_comments')}}
+				
+				//By users comments
+				md-button.md-raised.btn-nospace(
+					@click="setCommentFiltersActive('by-users')",
+					:class="{'md-primary':commentFiltersActive=='by-users'}"
+				)
+					| {{$t('By_users')}}
+
+				//By posts comments
+				md-button.md-raised.btn-nospace(
+					@click="setCommentFiltersActive('by-posts')",
+					:class="{'md-primary':commentFiltersActive=='by-posts'}"
+				)
+					| {{$t('By_posts')}}
+				
+				//By categories comments
+				md-button.md-raised.btn-nospace(
+					@click="setCommentFiltersActive('by-categories')",
+					:class="{'md-primary':commentFiltersActive=='by-categories'}"
+				)
+					| {{$t('By_Categories')}}
+
+
+			//All comments
+			allcomments(
+				v-if="commentFiltersActive=='all-comments'",
+				:showEditComment="showEditComment"
+			)
+				
+			//By users
+			by-users(
+				v-if="commentFiltersActive=='by-users'",
+				:showEditComment="showEditComment"
+			)
+				
+			//By posts
+			by-posts(v-if="commentFiltersActive=='by-posts'")
+			
+			//By categories
+			by-categories(v-if="commentFiltersActive=='by-categories'")

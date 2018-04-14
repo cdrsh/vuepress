@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel=icon href=/client/favicon.ico type=image/x-icon>
+    <meta charset=utf-8>
+    <title>vuepress</title>
+    <script src="https://www.google.com/recaptcha/api.js?onload=vueRecaptchaApiLoaded&render=explicit" async defer=defer></script>
+    <link href=/client/css/app.css rel=stylesheet>
+    <?php
+        if($keywords!="")
+            print('<meta name="Keywords" content="'.$keywords.'">');
+        print('<meta name="description" content="'.$description.'">');
+    ?>
+</head>
+<body>
+    <div id=app></div>
+    <script type=text/javascript src=/client/js/manifest.js></script>
+    <script type=text/javascript src=/client/js/vendor.js></script>
+    <script type=text/javascript src=/client/js/app.js></script>
+</body>
+</html>

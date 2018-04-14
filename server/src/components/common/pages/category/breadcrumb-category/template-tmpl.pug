@@ -1,0 +1,43 @@
+md-layout(md-flex="100")
+
+    //Category path
+    md-layout(md-flex="100")
+        md-layout(
+            md-flex-xsmall="100",
+            md-flex-small="100",
+            md-flex-medium="100",
+            md-flex-large="55",
+            md-flex-xlarge="60"
+        )
+            md-layout(md-vertical-align="center")
+                span.mr5(v-for="(itm,index) in getCategoriesBreadcrumb")
+                    a(  href="#", 
+                        @click.prevent="$store.dispatch(\
+                            'enterCategory',\
+                            {id:itm.id, idleaf:itm.idleaf}\
+                            )")
+                        span.md-primary.fnt12
+                            | {{itm['name_'+getContentLang]}}
+                            span(v-if="itm.id!=getCategoriyActiveID")
+                                | &rsaquo;
+                    span.md-primary
+                        .fnt14.bld 
+                            | &nbsp;
+        md-layout(
+            md-flex-xsmall="100",
+            md-flex-small="100",
+            md-flex-medium="100",
+            md-flex-large="45",
+            md-flex-xlarge="40", 
+            md-align="end"
+        )
+            //Paginator
+            paginator(
+                :onChange="(pgNum)=>\
+                    $store.dispatch('setCategoriesPageNum',pgNum)", 
+                :itemsCount="getCategoriesItemsCount", 
+                :itemsPerPage="getCategoriesItemsPerPage"
+            )
+    md-layout.brdb(md-flex="100")
+        | &nbsp;
+

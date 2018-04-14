@@ -1,0 +1,152 @@
+md-layout(md-flex="100")
+
+    //Edit comment dialog in one category comments list
+    edit-comment-of-category-one(
+        v-if="editDlg",
+        :closeEditComment="closeEditComment",
+        :commentObj="editComment"
+    )
+
+
+    //Categories list
+    md-layout(md-flex="100", v-if="!editDlg")
+        md-layout.brdb(md-flex="100")
+            //Category name
+            md-layout(md-flex="50")
+                h2 {{$t('Category')}}: {{catname}}
+            
+            //Remove comments of category button
+            md-layout(md-flex="50", md-align="end")
+                md-button.md-icon-button.md-raised(
+                    :title="$t('Back_to_categories')", 
+                    @click="closeCategoryOne"
+                )
+                    md-icon close
+
+        //Search panel
+        md-layout(md-flex="100", v-if="findDlg")
+            form.w100(novalidate @submit.stop.prevent="submit")
+                md-input-container
+                    //Comment text find
+                    label
+                        | {{$t('Part_text_comment')}}
+                    md-input(
+                        :placeholder="$t('Find_comment')",
+                        v-model="findTxt"
+                    )
+                    //Manage buttons
+                    span.btn-find
+                        //Search button
+                        md-button.md-raised.btn-nospace(@click="findComment")
+                            md-icon search
+                            | {{$t('Search')}}
+                        
+                        //Reset button
+                        md-button.md-raised.btn-nospace(@click="resetFind")
+                            md-icon replay
+                        
+                        //Close search button
+                        md-button.md-raised.btn-nospace(@click="closeFind")
+                            md-icon close
+
+        
+        md-layout(md-flex="100")
+            md-layout(
+                md-flex-xsmall="100",
+                md-flex-small="100",
+                md-flex-medium="100",
+                md-flex-large="50",
+                md-flex-xlarge="50",
+                md-align-xsmall="center",
+                md-align-small="start",
+                md-align-medium="start",
+                md-align-large="start",
+                md-align-xlarge="start"
+            )
+                //Remove checked comments
+                md-button.h40.md-raised.md-primary(
+                    @click="removeCheckedCommentsOfCategory",
+                    :title="$t('Remove_comment')"
+                )
+                    md-icon close
+                    b &nbsp;{{$t('Remove')}}
+                
+                //Block users of checked comments
+                md-button.h40.md-raised.md-primary(
+                    @click="blockUserCheckedComments",
+                    :title="$t('Block_user')"
+                )
+                    md-icon block
+                    b &nbsp;{{$t('Block')}}
+
+                //Search button
+                md-button.h40.md-raised.md-primary(@click="toggleFindDlg")
+                    md-icon search
+                    b &nbsp;{{$t('Search')}}
+
+            md-layout(
+                md-flex-xsmall="100",
+                md-flex-small="100",
+                md-flex-medium="100",
+                md-flex-large="50",
+                md-flex-xlarge="50",
+                md-align-xsmall="center",
+                md-align-small="center",
+                md-align-medium="end",
+                md-align-large="end",
+                md-align-xlarge="end"
+            )
+                //Paginator of comments
+                paginator.brdb(
+                    :onChange="onChangePage", 
+                    :itemsCount="$store.getters.getByCategoriesOneAllItemsCount", 
+                    :itemsPerPage="$store.getters.getByCategoriesOneItemsPerPage"
+                )
+
+            //Comments list
+            md-layout.comments-list(
+                md-flex="100",
+                v-for="itm in $store.getters.getByCategoriesOneComment",
+                :key="itm.id"
+            )
+                //Comment id
+                md-layout(md-flex="100")
+                    md-checkbox(v-model="itmChk", :md-value="itm.id")
+                        b {{itm.id}}
+                
+                //Comments txt
+                md-layout(md-flex="100")
+                    | {{itm.txt}}
+                
+                //Author
+                md-layout(md-flex="100")
+                    | {{itm.uname}} {{itm.isBlocked?'('+$t('blocked')+')':''}}
+                
+                //Date
+                md-layout(md-flex="100", md-align="end")
+                    | {{itm.dt}}
+                
+                //Comments manage buttons
+                md-layout(md-flex="100", md-align="center")
+                    md-layout(md-flex="100", md-align="end")
+                        //Edit comment
+                        md-button.md-icon-button.md-raised(
+                            :title="$t('Edit_comment')",
+                            @click="showEditComment(itm)"
+                        )
+                            md-icon.icon-gray create
+                        
+                        //Block Author
+                        md-button.md-icon-button.md-raised(
+                            :title="$t('Block_user')",
+                            @click="blockUserComment(itm.id)"
+                        )
+                            md-icon.icon-gray block
+                        
+                        //Remove comment
+                        md-button.md-icon-button.md-raised(
+                            :title="$t('Remove_comment')",
+                            @click="removeCommentsOfCategory(itm.id)"
+                        )
+                            md-icon.icon-gray close
+

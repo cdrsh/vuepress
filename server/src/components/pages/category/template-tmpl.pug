@@ -1,0 +1,93 @@
+md-layout.mrgn5(md-flex="100")
+    //Edit category dialog
+    edit-category(v-if="getVisEditCategory")
+
+    //Add category dialog
+    add-category(v-if="getVisAddCategory")
+
+    //Load category indicator
+    md-layout(
+        md-flex="100",
+        md-align="center",
+        v-show="getCategoriesStateLoading"
+    )
+        md-layout(md-flex="100", md-align="center")
+            h2 {{$t('Categories_loading')}}...
+        md-layout(md-flex="100", md-align="center")
+            md-spinner(:md-size="150", md-indeterminate="")
+
+    //Remove category indicator
+    md-layout(
+        md-flex="100",
+        md-align="center",
+        v-show="getOneCategoryRemoving"
+    )
+        md-layout(md-flex="100", md-align="center")
+            h2 {{$t('Categories_removing')}}...
+        md-layout(md-flex="100", md-align="center")
+            md-spinner(:md-size="150", md-indeterminate="")
+
+    //Move category indicator
+    md-layout(
+        md-flex="100",
+        md-align="center",
+        v-show="getCategoryMoving"
+    )
+        md-layout(md-flex="100", md-align="center")
+            h2 {{$t('Categories_moving')}}...
+        md-layout(md-flex="100", md-align="center")
+            md-spinner(:md-size="150", md-indeterminate="")
+
+
+
+    //Categories list
+    md-layout(  md-flex="100",
+                v-show="!getCategoriesStateLoading &&\
+                !getVisEditCategory &&\
+                !getVisAddCategory &&\
+                !getCategoryMoving &&\
+                !getOneCategoryRemoving")
+
+        //Buttons panel add/remove/search
+        btns-panel-category(
+            :onClickAdd="()=>{$store.dispatch('onClickAddCategory',true)}",
+            :onClickDelete="()=>{$store.dispatch(\
+                                'removeSelectedCategories',{r:$router})}",
+            :onClickFilter="()=>{$store.dispatch(\
+                                'setFilterCategory',!getCategoryFilterMode)}"
+        )
+
+        //Filter mode
+        md-layout(md-flex="100", v-show="getCategoryFilterMode")
+
+            //Find dialog
+            find-dialog(
+                :placeholderInit="$t('Category_name')",
+                :onFindCategory="(txt)=>{$store.dispatch(\
+                                    'setCategoryFilterText',txt)}",
+                :onResetFindCategory="()=>{$store.dispatch(\
+                                    'setCategoryFilterText','')}",
+                :closeFind="()=>{$store.dispatch(\
+                                'setFilterCategory',!getCategoryFilterMode)}"
+            )
+
+            //Paginator found
+            md-layout(md-flex="100", md-align="end")
+                paginator(
+                    :onChange="(pgNum)=>{$store.dispatch(\
+                            'setFilteredCategoryPageNum',pgNum)}",
+                    :itemsCount="getFilteredCategoriesItemsCount",
+                    :itemsPerPage="getCategoriesItemsPerPage"
+                )
+
+            //Categories list
+            list-filtered-categories.brdt
+
+        //Unfilter mode
+        md-layout(md-flex="100", v-show="!getCategoryFilterMode")
+            //Breadcrumbs
+            breadcrumb-category.brdt
+
+            //Category list
+            list-categories
+

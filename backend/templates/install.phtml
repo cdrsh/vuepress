@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <title>
+            <?php echo $Install_Vuepress; ?>
+        </title>
+    </head>
+    <body style="width:100%;padding-left:50%;overflow-x:hidden;">
+        <style>
+        .brd {
+            border: 1px solid #CCCCCC;
+            border-radius:5px;
+            width:100% !important;
+            padding:15px;
+        }
+        
+        .brd input,select {
+            border: none;
+            border-bottom: 1px solid #CCCCCC;
+            background-color:#EEEEEE;
+            margin-bottom:10px;
+            font-size:12pt;
+            border-radius:3px;
+            padding:5px;
+        }
+
+        .install-button {
+            font-size:16pt;
+            padding:10px;
+            border-radius: 5px;
+
+        }
+        </style>
+        <div style="width:250px;margin-left:-125px;">
+            <h3><?php echo $Install_Vuepress; ?></h3>
+            <?php if($isShowErrors) print($errors); ?>
+            <form action="/install" method="GET">
+                <div class="brd">
+                    <h4><?php echo $HOSTING_SETTINGS;?>:</h4>
+
+                    <label><?php echo $Http_Protocol;?></label>
+                    <select name="http_backend">
+                        <option <?php echo ($http_backend=="http")?"selected":"";?> value="http">http://</option>
+                        <option <?php echo ($http_backend=="https")?"selected":"";?> value="https">https://</option>
+                    </select>
+                    
+                    <br>
+
+                    <label><?php echo $Host;?></label>
+                    <input 
+                        type="text" 
+                        name="host_backend" 
+                        style="width:100%;"
+                        value="<?php echo $host_backend;?>"
+                    >
+
+                    <label><?php echo $Port;?></label>
+                    <input 
+                        type="text" 
+                        name="port_backend" 
+                        style="width:100%;"
+                        value="<?php echo $port_backend;?>"
+                    >
+
+                    <label><?php echo $Jwt_server_key;?></label>
+                    <input 
+                        type="text" 
+                        name="port_backend" 
+                        style="width:100%;"
+                        value="<?php echo $jwt_server_key;?>"
+                    >
+                    
+                </div>
+
+                <br>
+
+                <div class="brd">
+
+                    <h4><?php echo $MYSQL_SETTINGS;?>:</h4>
+
+                    <label><?php echo $DB_Host;?></label>
+                    <input 
+                        type="text" 
+                        name="db_host" 
+                        style="width:100%;"
+                        value="<?php echo $db_host;?>"
+                    >
+
+                    <label><?php echo $DB_Name;?></label>
+                    <input 
+                        type="text" 
+                        name="db_name" 
+                        style="width:100%;"
+                        value="<?php echo $db_name;?>"
+                    >
+
+                    <label><?php echo $DB_User;?></label>
+                    <input 
+                        type="text" 
+                        name="db_user" 
+                        style="width:100%;"
+                        value="<?php echo $db_user;?>"
+                    >
+
+                    <label><?php echo $DB_Password;?></label>
+                    <input 
+                        type="password" 
+                        name="db_password" 
+                        style="width:100%;"
+                    >
+                </div>
+
+                <br>
+
+                <div class="brd">
+                    <h4><?php echo $MAIL_SETTINGS;?>:</h4>
+
+                    <label><?php echo $SMTP_Host;?></label>
+                    <input 
+                        type="text" 
+                        name="mail_host" 
+                        style="width:100%;"
+                        value="<?php echo $mail_host;?>"
+                    >
+
+                    <label><?php echo $SMTP_Port;?></label>
+                    <input 
+                        type="text" 
+                        name="mail_port" 
+                        style="width:100%;"
+                        value="<?php echo $mail_port;?>"
+                    >
+
+                    <label><?php echo $SMTP_Secure;?></label>
+                    <select name="mail_secure">
+                        <option <?php echo ($mail_secure=="ssl")?"selected":"";?> value="ssl">ssl</option>
+                        <option <?php echo ($mail_secure=="tls")?"selected":"";?> value="tls">tls</option>
+                    </select>
+                    <br>
+
+                    <label><input 
+                        type="checkbox" 
+                        name="mail_auth" 
+                        checked
+                    > <?php echo $SMTP_Auth;?></label>
+                    <br>
+
+                    <label><?php echo $SMTP_Username;?></label>
+                    <input 
+                        type="text" 
+                        name="mail_username" 
+                        style="width:100%;"
+                        value="<?php echo $mail_username;?>"
+                    >
+
+                    <label><?php echo $SMTP_Password;?></label>
+                    <input 
+                        type="password" 
+                        name="mail_password" 
+                        style="width:100%;"
+                        value="<?php echo $mail_password;?>"
+                    >
+
+                    <label><?php echo $SMTP_Charset;?></label>
+                    <input 
+                        type="text" 
+                        name="mail_charset" 
+                        style="width:100%;"
+                        value="UTF-8"
+                    >
+
+                    <label><input 
+                        type="checkbox" 
+                        name="mail_ishtml" 
+                        checked
+                    > <?php echo $HTML_Format;?></label>
+                </div>
+                
+
+                <br>
+                <br>
+                <br>
+                <h4><?php echo $For_Developers_Nodejs_settings;?></h4>
+
+                <div class="brd">
+                    <h4><?php echo $CLIENT_SETTINGS;?>:</h4>
+
+                    <label><?php echo $Http_Protocol;?></label>
+                    <select name="http_client">
+                        <option <?php echo ($http_client=="http")?"selected":"";?> value="http">http://</option>
+                        <option <?php echo ($http_client=="https")?"selected":"";?> value="https">https://</option>
+                    </select>
+                    <br>
+
+                    <label><?php echo $Host;?></label>
+                    <input 
+                        type="text" 
+                        name="host_client" 
+                        style="width:100%;"
+                        value="<?php echo $host_client;?>"
+                    >
+
+                    <label><?php echo $Port;?></label>
+                    <input 
+                        type="text" 
+                        name="port_client" 
+                        style="width:100%;"
+                        value="<?php echo $port_client;?>"
+                    >
+                </div>
+
+                <br>
+
+                <div class="brd">
+                    <h4><?php echo $ADMIN_PANEL_SETTINGS;?>:</h4>
+
+                    <label><?php echo $Http_Protocol;?></label>
+                    <select name="http_admin_client">
+                        <option <?php echo ($http_admin_client=="http")?"selected":"";?> value="http">http://</option>
+                        <option <?php echo ($http_admin_client=="https")?"selected":"";?> value="https">https://</option>
+                    </select>
+                    <br>
+
+                    <label><?php echo $Host;?></label>
+                    <input 
+                        type="text" 
+                        name="host_admin_client" 
+                        style="width:100%;"
+                        value="<?php echo $host_admin_client;?>"
+                    >
+
+                    <label><?php echo $Port;?></label>
+                    <input 
+                        type="text" 
+                        name="port_admin_client" 
+                        style="width:100%;"
+                        value="<?php echo $port_admin_client;?>"
+                    >
+                </div>
+
+                <br>
+                
+                <div style="width:100%;text-align:right;">
+                    <input 
+                        type="submit" 
+                        value="<?php echo $Install;?>" 
+                        class="install-button"
+                    >
+                </div>
+
+                <br>
+                <br>
+                <br>
+                &nbsp;
+
+            </form>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,21 @@
+.bigLPanel {
+	padding:0px;
+	width:200px;
+	float:left;
+	margin-right:5px;
+	overflow:hidden;
+	border-right:1px solid #CCCCCC;
+}
+
+.smallLPanel {
+	padding:0px;
+	width:55px;
+	float:left;
+	margin-right:5px;
+	overflow:hidden;
+	border-right:1px solid #CCCCCC;
+}
+
+.active-cls {
+	background-color:#CCCCCC !important;
+}

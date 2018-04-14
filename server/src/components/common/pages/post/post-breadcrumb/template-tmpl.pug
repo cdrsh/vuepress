@@ -1,0 +1,25 @@
+md-layout(md-flex="100")
+    md-layout(
+        md-flex-xsmall="100",
+        md-flex-small="100",
+        md-flex-medium="100",
+        md-flex-large="55",
+        md-flex-xlarge="60"
+    )
+        md-layout(md-vertical-align="center")
+            span.mr5(v-for="(itm,index) in \
+                $store.getters.getPostsCategoriesBreadcrumbSelected"
+            )
+                a(href="#", @click.prevent="selectCategory(itm)")
+                    //Category name
+                    span.md-primary.fnt12
+                        | {{itm['name_'+$store.getters.getContentLang]}}
+                        span(v-if="itm.id!=\
+                            $store.getters.getPostCategoriyActiveIDSelected"
+                        )
+                            | &rsaquo;
+                span.md-primary
+                    .fnt14.bld 
+                        | &nbsp;
+
+

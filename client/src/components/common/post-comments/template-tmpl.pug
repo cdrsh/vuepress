@@ -1,0 +1,145 @@
+md-layout(md-flex="100", md-row="")
+
+    //Add comment modal dialog
+    md-dialog(ref="addCommentDialog")
+        //Ttile
+        md-dialog-title.ac 
+            | {{$t('Add_comment')}}
+
+        md-dialog-content.comment-dialog-height
+            form.w100.brdt.pt15(
+                novalidate="", 
+                @submit.stop.prevent="submit"
+            )
+                label {{$t('Your_comment')}}:
+                textarea.w100.answered-comment(
+                    cols="30", 
+                    :rows="getSettings.RECAPCHA_COMMENTS?10:17",
+                    v-model="cmntToAdd.mycmnt",
+                    name="Comment", 
+                    v-validate="'required|min:1'", 
+                    data-vv-delay="200", 
+                    :class="{   'input':true,\
+                                'is-danger':errors.has('Comment') }",
+                    placeholder="Type here"
+                )
+                md-layout.c-red(
+                    v-show="errors.has('Comment')",
+                    column="", 
+                    md-align="end"
+                ) 
+                    | {{ errors.first('Comment') }}
+
+            
+            vue-recaptcha(
+                :sitekey="RecapchaKEY",
+                ref="recaptchaId",
+                @verify="onVerify",
+                @expired="onExpired",
+                v-if="getSettings.RECAPCHA_COMMENTS"
+            )
+        md-dialog-actions
+            md-button.md-raised(@click="closeAddCommentDlg") 
+                | {{$t('Cancel')}}
+            md-button.md-raised.md-primary(@click="addComment") 
+                | {{$t('Comment')}}
+
+    
+    
+    //Answer comment modal dialog
+    md-dialog(ref="answerCommentDialog")
+        //Title
+        md-dialog-title.ac {{$t('Answer_comment')}}
+
+        md-dialog-content.comment-dialog-height
+            | {{this.cmntToEdit.txt}}
+            form.w100.brdt.pt15(
+                novalidate="", 
+                @submit.stop.prevent="submit"
+            )
+                label {{$t('Your_comment')}}:
+                div
+                    textarea.w100.answered-comment(
+                        cols="30", 
+                        :rows="getSettings.RECAPCHA_COMMENTS?7:20",
+                        v-model="cmntToEdit.mycmnt",
+                        name="Comment", 
+                        v-validate="'required|min:1'", 
+                        data-vv-delay="200", 
+                        :class="{   'input':true,\
+                                    'is-danger':errors.has('Comment')}",
+                        placeholder="Type here"
+                    )
+                    md-layout.c-red(
+                        v-show="errors.has('Comment')", 
+                        column="", 
+                        md-align="end"
+                    ) 
+                        | {{ errors.first('Comment') }}
+            vue-recaptcha(
+                :sitekey="RecapchaKEY",
+                ref="recaptchaId",
+                @verify="onVerify",
+                @expired="onExpired",
+                v-if="getSettings.RECAPCHA_COMMENTS"
+            )
+        md-dialog-actions
+            md-button.md-raised(@click="closeAnswerDlg") 
+                | {{$t('Cancel')}}
+            md-button.md-raised.md-primary(@click="answerCommentDialog") 
+                | {{$t('Answer')}}
+
+
+
+    md-layout.plr5.brdb(
+        md-flex="100", 
+        md-align="center", 
+        md-row=""
+    )
+        //Add comment button
+        md-layout(
+            md-flex="100", 
+            md-align="start"
+        )
+            md-layout.md-caption(
+                md-flex="50", 
+                md-align="start"
+            )
+                h4 {{$t('Post_comments')}}
+            md-layout(
+                md-flex="50", 
+                md-align="end", 
+                v-if="isRegistered"
+            )
+                //Add comment button
+                md-button.md-raised.add-comment-btn(
+                    @click="openAddCommentDlg"
+                )
+                    md-icon add
+                    | {{$t('Add_comment')}}
+
+    //Comments pages
+    md-layout.brdb(
+        md-flex="100", 
+        md-align="center", 
+        md-row=""
+    )
+        paginator(
+            :onChange="onChangeCommentsPage", 
+            :itemsCount="getCommentsAllItems", 
+            :itemsPerPage="getCommentsItemsPerPage"
+        )
+
+    //List of comments
+    md-layout(md-flex="100")
+        virtual-list.vrt-list(
+            :size="5", 
+            :remain="8",
+        )
+            post-comment.brdb(
+                v-for="itm in getComments",
+                :key="itm.id"
+                :itm="itm",
+                :answerShowDlg="answerShowDlg",
+                :isRegged="isRegistered"
+            )

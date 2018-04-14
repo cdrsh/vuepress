@@ -1,0 +1,81 @@
+md-layout(md-flex="100")
+    //Select content language
+    md-layout(
+        md-flex="50",
+        md-align="end",
+        md-flex-offset="50",
+        v-show="$store.getters.getLangsContentSelected.length>1"
+    )
+        select-content-language
+
+    //Categories list
+    md-layout.brdb(
+        md-flex="100",
+        v-for="itm in this.$store.getters.getCategories",
+        :key="itm.id"
+    )
+        //Content language selector
+        md-layout(
+            md-flex-xsmall="100",
+            md-flex-small="100",
+            md-flex-medium="55",
+            md-flex-large="65",
+            md-flex-xlarge="80",
+            md-align="start"
+        )
+            .flex-row.mtb5
+                .w60px.plr5
+                    md-checkbox.md-primary(v-model="itm.chkd") 
+                        | {{itm.id}}
+                .flex-strtch1.cat-name
+                    | {{itm['name_'+$store.getters.getContentLang]}}
+        
+        md-layout.mtb5(
+            md-flex-xsmall="100",
+            md-flex-small="100",
+            md-flex-medium="45",
+            md-flex-large="35",
+            md-flex-xlarge="20",
+            md-align="end"
+        )
+            //Move button down
+            md-button.md-icon-button.md-list-action.md-raised(
+                :title="$t('Move_down')",
+                @click="$store.dispatch('moveDwCategory',\
+                        {id:itm.id,r:$router})"
+            )
+                md-icon.icon-gray expand_more
+            
+            //Move button up
+            md-button.md-icon-button.md-list-action.md-raised(
+                :title="$t('Move_up')",
+                @click="$store.dispatch('moveUpCategory',\
+                        {id:itm.id,r:$router})"
+            )
+                md-icon.icon-gray expand_less
+            
+            //Edit category button
+            md-button.md-icon-button.md-list-action.md-raised(
+                :title="$t('Edit_category')",
+                @click="$store.dispatch('openEditCategoryDlg',\
+                        {vis:true, id:itm.id})"
+            )
+                md-icon.icon-gray create
+            
+            //Remove category button
+            md-button.md-icon-button.md-list-action.md-raised(
+                :title="$t('Remove_category')",
+                @click="$store.dispatch('removeOneCategory',\
+                        {id:itm.id,r:$router})"
+            )
+                md-icon.icon-gray close
+            
+            //Enter category button
+            md-button.md-icon-button.md-list-action.md-raised(
+                :title="$t('Enter_category')",
+                @click="$store.dispatch('enterCategory',\
+                        {id:itm.id, idleaf:itm.idleaf})"
+            )
+                md-icon.icon-gray chevron_right
+
+

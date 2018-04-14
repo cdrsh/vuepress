@@ -1,0 +1,27 @@
+md-layout(md-flex="100")
+	md-switch.md-primary(v-model="userFieldsOn")
+		| {{$t('User_fields')}}
+	md-layout(
+		md-flex="100", 
+		md-align="start",
+		v-if="userFieldsOn"
+	)
+		//User fields list
+		md-layout(md-flex="100")
+			md-chips(v-model="userFields") 
+		
+		//User field add
+		md-layout(md-flex="100")
+			.flex-row.w100
+				.flex-strtch1
+					form(novalidate, @submit.stop.prevent="submit")
+						md-input-container
+							label {{$t('Filed_name')}}
+							md-input(
+								:placeholder="$t('Filed_name')", 
+								v-model="userFld"
+							)
+				//Add button
+				.flex-strtch0
+					md-button.md-raised(@click="addItem")
+						b {{$t('Add')}}

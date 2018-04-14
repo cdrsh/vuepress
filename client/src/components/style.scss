@@ -1,0 +1,225 @@
+@media screen and (min-width: 0px) and (max-width: 600px) {
+    .my-hide-xsmall, 
+    .my-show-small, 
+    .my-show-medium, 
+    .my-show-large, 
+    .my-show-xlarge {
+        display: none;
+    }
+}
+
+@media screen and (min-width: 601px) and (max-width: 960px) {
+    .my-hide-small,
+    .my-show-xsmall, 
+    .my-show-medium, 
+    .my-show-large, 
+    .my-show-xlarge 
+    {
+        display: none;
+    }
+}
+
+@media screen and (min-width: 961px) and (max-width: 1280px) {
+    .my-hide-medium,
+    .my-show-xsmall, 
+    .my-show-small, 
+    .my-show-large, 
+    .my-show-xlarge 
+    {
+        display: none;
+    }
+}
+
+@media screen and (min-width: 1281px) and (max-width: 1920px) {
+    .my-hide-large,
+    .my-show-xsmall, 
+    .my-show-small, 
+    .my-show-medium, 
+    .my-show-xlarge 
+    {
+        display: none;
+    }
+}
+
+@media screen and (min-width: 1921px) and (max-width: 10000px) {
+    .my-hide-xlarge,
+    .my-show-xsmall, 
+    .my-show-small, 
+    .my-show-medium, 
+    .my-show-large 
+    {
+        display: none;
+    }
+}
+
+
+
+.ac {
+    text-align: center !important;
+}
+
+.al {
+    text-align: left !important;
+}
+
+.ar {
+    text-align: right !important;
+}
+
+.w100 {
+    width: 100% !important;
+}
+
+.h100 {
+	height:100% !important;
+}
+
+
+
+.mlr0 {
+	margin-left:0px !important;
+	margin-right:0px !important;
+}
+
+.mr5 {
+    margin-right: 5px !important;
+}
+
+.ml5 {
+	margin-left:5px !important;
+}
+
+.mr11 {
+	margin-right:11px !important;
+}
+
+.mr15 {
+	margin-right: 15px !important;
+}
+
+.mt15 {
+	margin-top:15px !important;
+}
+
+.mar15 {
+    margin:15px !important;
+}
+
+
+
+
+
+.ptb5 {
+    padding-top: 5px !important;
+    padding-bottom: 5px !important;
+}
+
+.plr5 {
+    padding-left:5px !important;
+    padding-right:5px !important;
+}
+
+.pad5 {
+    padding: 5px !important;
+}
+
+.pad15 {
+    padding: 15px !important;
+}
+
+.pt15 {
+	padding-top: 15px !important;
+}
+
+.pb15 {
+	padding-bottom: 15px;
+}
+
+.pt {
+	padding-top: 15px !important;
+}
+
+
+
+
+
+.brdl {
+	border-left: 1px solid #CCCCCC !important;
+}
+
+.brdr {
+	border-right: 1px solid #CCCCCC !important;
+}
+
+.brdb {
+    border-bottom:1px solid #CCCCCC !important;
+}
+
+.brdt {
+    border-top:1px solid #CCCCCC !important;
+}
+
+.brdb-dash {
+    border-bottom:1px dashed #CCCCCC !important;
+}
+
+
+
+
+
+
+
+
+.flex-row {
+    display:flex;
+}
+
+.flex-strtch1 {
+     flex-grow:1;
+}
+
+.flex-strtch0 {
+    flex-grow:0;
+}
+
+
+
+
+
+
+.md-theme-default a:not(.md-button) {
+    color: #3366CC !important;
+}
+
+.icon-gray {
+    color: #555555 !important;
+}
+
+.breadcrmb>span>div {
+    //@extend .md-body-2;
+    font-size: 12pt !important;
+}
+
+.breadcrmb {
+    cursor: pointer;
+}
+
+
+
+.dlg {
+    border: 1px solid #CCCCCC;
+    border-radius: 5px;
+}
+
+.vueditor {
+    height: 400px !important;   
+}
+
+.btn-nospace {
+    min-width:0px;
+    margin:0px;
+}
+
+a {
+    color: #0099FF !important;
+}

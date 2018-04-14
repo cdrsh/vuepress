@@ -1,0 +1,18 @@
+md-layout(md-flex="100")
+    form.w100(novalidate @submit.stop.prevent="submit")
+        md-input-container
+            label
+                | {{$t('Category_find')}}
+            md-input(
+                :placeholder="placeholder",
+                v-model="findCategoryName"
+            )
+            span.btn-find
+                md-button.md-raised.btn-nospace(@click="findCategory")
+                    md-icon search
+                    | {{$t('Search')}}
+                md-button.md-raised.btn-nospace(@click="resetFindCategory")
+                    md-icon replay
+                md-button.md-raised.btn-nospace(@click="closeFind")
+                    md-icon close
+

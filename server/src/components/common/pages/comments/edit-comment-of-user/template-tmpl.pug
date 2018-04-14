@@ -1,0 +1,57 @@
+md-layout(md-flex="100")
+
+    //Dialog title
+    md-layout.brdb(md-flex="100")
+        md-layout(md-flex="50", md-align="start")
+            h2 {{$t('Edit_comment')}}
+        //Close dialog button
+        md-layout(md-flex="50", md-align="end")
+            md-button.md-icon-button.md-raised(
+                :title="$t('Back_to_comments')", 
+                @click="closeEditComment"
+            )
+                md-icon close
+
+    //Comment text
+    md-layout(md-flex="100", md-align="start")
+        md-input-container
+            label {{$t('Comment')}}
+            md-textarea(
+                cols="30", 
+                rows="5",
+                v-model="editCommentObj.txt"
+                :placeholder="$t('Comment')",
+            )
+
+    //Author
+    md-layout(md-flex="100", md-align="start")
+        label 
+            | {{$t('User')}}:
+            | {{editCommentObj.uname}}&nbsp;
+            | {{editCommentObj.isBlocked?'('+$t('blocked')+')':''}}
+
+    //Date publish
+    md-layout(md-flex="100", md-align="start")
+        label {{$t('Publish_date')}}: {{editCommentObj.dt}}
+
+    //Manage buttons
+    md-layout(md-flex="100", md-align="end")
+        
+        //Block users
+        md-button.md-raised.md-primary(
+            @click="blockUserComment"
+        )
+            md-icon block
+            | &nbsp;{{$t('Block')}}
+        
+        //Close edit comment
+        md-button.md-raised(
+            @click="closeEditComment"
+        )
+            | {{$t('Cancel')}}
+        
+        //Save comment
+        md-button.md-raised.md-primary(
+            @click="saveComment"
+        )
+            | {{$t('Save')}}

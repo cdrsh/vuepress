@@ -1,0 +1,145 @@
+md-layout(md-flex="100")
+
+    //One post comment
+    comments-of-post(
+        v-if="inPostDlg",
+        :closeFn="closeInPost",
+        :postObj="postObjEntered"
+    )
+
+    md-layout(md-flex="100", v-show="!inPostDlg")
+
+        //Search panel
+        md-layout(md-flex="100", v-if="findDlg")
+            form.w100(novalidate @submit.stop.prevent="submit")
+                md-input-container
+                    //Find test comment
+                    label
+                        | {{$t('Part_text_comment')}}
+                    md-input(
+                        :placeholder="$t('Find_comment')",
+                        v-model="findTxt"
+                    )
+                    //Manage buttons
+                    span.btn-find
+                        //Find button
+                        md-button.md-raised.btn-nospace(@click="findComment")
+                            md-icon search
+                            | {{$t('Search')}}
+
+                        //Reset find button
+                        md-button.md-raised.btn-nospace(@click="resetFind")
+                            md-icon replay
+                        
+                        //Close find button
+                        md-button.md-raised.btn-nospace(@click="closeFind")
+                            md-icon close
+
+
+
+        md-layout(md-flex="100")
+            //Manage buttons of one post
+            md-layout(
+                md-flex-xsmall="100",
+                md-flex-small="100",
+                md-flex-medium="100",
+                md-flex-large="50",
+                md-flex-xlarge="50",
+                md-align-xsmall="center",
+                md-align-small="center",
+                md-align-medium="start",
+                md-align-large="start",
+                md-align-xlarge="start"
+            )
+                //Remove comments of checked posts
+                md-button.h40.md-raised.md-primary(
+                    @click="removeCommentsOfPosts",
+                    :title="$t('Comments_remove_selected_users')"
+                )
+                    md-icon close
+                    b &nbsp;{{$t('Remove')}}
+
+                //Block users commented checked posts
+                md-button.h40.md-raised.md-primary(@click="blockUsersCheckedPosts")
+                    md-icon block
+                    b &nbsp;{{$t('Block')}}
+                
+                //Toggle find dialog
+                md-button.h40.md-raised.md-primary(@click="toggleFindDlg")
+                    md-icon search
+                    b &nbsp;{{$t('Search')}}
+
+            //Paginator of posts
+            md-layout(
+                md-flex-xsmall="100",
+                md-flex-small="100",
+                md-flex-medium="100",
+                md-flex-large="50",
+                md-flex-xlarge="50",
+                md-align-xsmall="center",
+                md-align-small="center",
+                md-align-medium="end",
+                md-align-large="end",
+                md-align-xlarge="end"
+            )
+                paginator.brdb(
+                    :onChange="onChangePage", 
+                    :itemsCount="$store.getters.getByPostsAllItemsCount", 
+                    :itemsPerPage="$store.getters.getByPostsItemsPerPage"
+                )
+
+        //Content language selector
+        md-layout(
+            md-flex="100", 
+            md-align="end",
+            v-show="$store.getters.getLangsContentSelected.length>1"
+        )
+            select-content-language    
+
+
+        //Posts list
+        md-layout.comments-list(
+            md-flex="100",
+            v-for="itm in $store.getters.getByPosts",
+            :key="itm.id"
+        )
+            //Post id
+            md-layout(md-flex="100")
+                md-checkbox(v-model="itmChk", :md-value="itm.id")
+                    | {{itm.id}}
+            
+            //Post title with language prefix
+            md-layout(md-flex="100")
+                | {{itm["title_"+getContentLang]}}
+            
+            //Comments count
+            md-layout(md-flex="100")
+                | {{$t('comments')}}: {{itm.cnt}}
+            
+            //Publish date
+            md-layout(md-flex="100", md-align="end")
+                | {{$t('Published')}}: {{itm.dt}}
+            
+            //Manage buttons
+            md-layout.ptb5(md-flex="100", md-align="end")
+
+                //Block users commented current post
+                md-button.md-icon-button.md-raised(
+                    :title="$t('Block_user')",
+                    @click="blockUsers(itm.id)"
+                )
+                    md-icon block
+                
+                //Remove comments of the current post
+                md-button.md-icon-button.md-raised(
+                    :title="$t('Remove_comment')",
+                    @click="removeCommentsOfPost(itm.id)"
+                )
+                    md-icon close
+                
+                //Enter post and get comments of the current post
+                md-button.md-icon-button.md-raised(
+                    :title="$t('All_comments_of_current_post')",
+                    @click="enterPost(itm)"
+                )
+                    md-icon chevron_right

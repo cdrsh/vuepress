@@ -1,0 +1,190 @@
+md-layout.pad5(md-flex="100")
+
+    //Dialog title
+    md-layout.brdb(md-flex="100")
+        md-layout(md-flex="80")
+            h2 {{$t('User_add')}}
+        
+        //Close button
+        md-layout(md-flex="20", md-align="end")
+            md-button.md-icon-button.md-raised(
+                :title="$t('Back_to_users')", 
+                @click="closeFn"
+            )
+                md-icon close
+
+    //Email
+    md-layout(md-flex="100")
+        md-input-container
+            label
+                | {{$t('email')}}
+            md-input(
+                type="text",
+                :placeholder="$t('email')",
+                v-model="addUser.email",
+                name="Email", 
+                v-validate="'required|email'", 
+                data-vv-delay="1000", 
+                :class="{'input': true, 'is-danger': errors.has('Email') }",
+            )
+            md-layout.c-red(
+                v-show="errors.has('Email')", 
+                column="", 
+                md-align="end") 
+                | {{ errors.first('Email') }}
+
+    //Password
+    md-layout(md-flex="100")
+        md-input-container
+            label
+                | {{$t('password')}}
+            md-input(
+                type="password",
+                :placeholder="$t('password')",
+                v-model="addUser.pass",
+                name="Password", 
+                v-validate="'required|min:8'", 
+                data-vv-delay="1000", 
+                :class="{'input': true, 'is-danger': errors.has('Password') }",
+            )
+            md-layout.c-red(
+                v-show="errors.has('Password')", 
+                column="", 
+                md-align="end") 
+                | {{ errors.first('Password') }}
+
+    //Nickname
+    md-layout(md-flex="100")
+        md-input-container
+            label
+                | {{$t('nick')}}
+            md-input(
+                type="text",
+                :placeholder="$t('nick')",
+                v-model="addUser.nick",
+                name="Nick", 
+                v-validate="'required'", 
+                data-vv-delay="1000", 
+                :class="{'input': true, 'is-danger': errors.has('Nick') }",
+            )
+            md-layout.c-red(
+                v-show="errors.has('Nick')", 
+                column="", 
+                md-align="end") 
+                | {{ errors.first('Nick') }}
+
+    //First password
+    md-layout(md-flex="100")
+        md-input-container
+            label
+                | {{$t('first_name')}}
+            md-input(
+                type="text",
+                :placeholder="$t('first_name')",
+                v-model="addUser.fname",
+                name="First Name", 
+                v-validate="'required'", 
+                data-vv-delay="1000", 
+                :class="{'input': true, 'is-danger': errors.has('First Name') }",
+            )
+            md-layout.c-red(
+                v-show="errors.has('First Name')", 
+                column="", 
+                md-align="end") 
+                | {{ errors.first('First Name') }}
+
+    //Middle password
+    md-layout(md-flex="100")
+        md-input-container
+            label
+                | {{$t('middle_name')}}
+            md-input(
+                type="text",
+                :placeholder="$t('middle_name')",
+                v-model="addUser.mname",
+                name="Middle Name", 
+            )
+
+    //Last password
+    md-layout(md-flex="100")
+        md-input-container
+            label
+                | {{$t('last_name')}}
+            md-input(
+                type="text",
+                :placeholder="$t('last_name')",
+                v-model="addUser.lname",
+            )
+
+    //Site
+    md-layout(md-flex="100")
+        md-input-container
+            label
+                | {{$t('site')}}
+            md-input(
+                type="text",
+                :placeholder="$t('site')",
+                v-model="addUser.site",
+                name="Web site", 
+                v-validate="'url'", 
+                data-vv-delay="1000", 
+                :class="{'input': true, 'is-danger': errors.has('Web site') }",
+            )
+            md-layout.c-red(
+                v-show="errors.has('Web site')", 
+                column="", 
+                md-align="end") 
+                | {{ errors.first('Web site') }}
+
+    //Phone
+    md-layout(md-flex="100")
+        md-input-container
+            label
+                | {{$t('phone')}}
+            md-input(
+                :placeholder="$t('phone')",
+                v-model="addUser.phone"
+            )
+
+    //Privelege
+    md-layout.brdb(md-flex="100")
+        md-layout(md-flex="50")
+            h4 {{$t('Privilege')}}
+    md-layout(md-flex="100")
+        md-checkbox(v-model="addUser.privlgs.adminA") 
+            | {{$t('Admin_access')}}
+    md-layout(md-flex="100")
+        md-checkbox(v-model="addUser.privlgs.filesRW") 
+            | {{$t('Files_management')}}
+    md-layout(md-flex="100")
+        md-checkbox(v-model="addUser.privlgs.categoryW") 
+            | {{$t('Category_Write')}}
+    md-layout(md-flex="100")
+        md-checkbox(v-model="addUser.privlgs.categoryR") 
+            | {{$t('Category_Read')}}
+    md-layout(md-flex="100")
+        md-checkbox(v-model="addUser.privlgs.usersW") 
+            | {{$t('Users_Write')}}
+    md-layout(md-flex="100")
+        md-checkbox(v-model="addUser.privlgs.usersR") 
+            | {{$t('Users_Read')}}
+    md-layout(md-flex="100")
+        md-checkbox(v-model="addUser.privlgs.postW") 
+            | {{$t('Posts_Write')}}
+    md-layout(md-flex="100")
+        md-checkbox(v-model="addUser.privlgs.postR") 
+            | {{$t('Posts_Read')}}
+    md-layout(md-flex="100")
+        md-checkbox(v-model="addUser.privlgs.blocked") 
+            | {{$t('Priv_Blocked')}}
+
+    //Manage buttons
+    md-layout(md-flex="100", md-align="end")
+    
+        //Cancel
+        md-button.md-raised(@click="closeFn")
+            | {{$t('Cancel')}}
+        
+        //Add
+        md-button.md-raised.md-primary(@click="addUserFn")
+            | {{$t('Add')}}

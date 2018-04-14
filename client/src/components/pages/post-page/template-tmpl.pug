@@ -1,0 +1,53 @@
+md-layout(md-flex="100", md-vertical-align="start")
+    md-layout(md-flex="100")
+
+        //Post title
+        md-layout(md-flex="90")
+            h1.post-title.brdb.al
+                | {{post["title"]}}
+        
+        //Close post button
+        md-layout(md-flex="10", md-align="end")
+            md-button.md-icon-button.md-raised(
+                :title="$t('Back_to_posts_list')", 
+                @click="closeOnePost"
+            )
+                md-icon close
+
+
+    //Post
+    md-layout.brdb(md-flex="100", md-column="")
+        //Post content
+        md-layout(md-flex="100")
+            div.pt15.pb15.brdb.w100(v-html="post['txt']")
+        
+        //Categories
+        md-layout.md-caption(
+            md-flex="100", 
+            v-if="getSettings.CATEGORIES_ENABLE"
+        )
+            span.mr5(
+                v-for="oneCat in post.categories",
+                :key="oneCat.id"
+            )
+                router-link.hrf(:to="'/category/'+oneCat.id")
+                    | {{oneCat["name_"+getContentLang]}}
+        
+        //Author
+        md-layout.md-caption(
+            md-flex="100", 
+            v-if="getUserName(post.user)!=''"
+        )
+            | {{$t('Author')}}: {{getUserName(post.user)}}
+        
+        //Date of publish
+        md-layout(
+            md-flex="100", 
+            md-align="end"
+        )
+            | {{getDateFrm(post.dt)}}
+        
+
+    //All comments of post
+    post-comments(v-if="getSettings.COMMENTS_ENABLE")
+    

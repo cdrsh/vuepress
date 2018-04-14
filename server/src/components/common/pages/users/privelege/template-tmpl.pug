@@ -1,0 +1,17 @@
+md-layout(md-flex="100")
+    | {{$t('Admin_access')}} 
+    | {{conf.isAdminAccess(privelege)?'Y':'NO'}} /
+    | {{$t('files')}} 
+    | {{conf.isFilesManagement(privelege)?'RW':'NO'}} /
+    | {{$t('categories')}} 
+    | {{conf.isReadCategories(privelege)?'R':''}}
+    | {{conf.isWriteCategories(privelege)?'W':''}}
+    | {{getRWCategories(privelege)}} /
+    | {{$t('posts')}} 
+    | {{conf.isReadPost(privelege)?'R':''}}
+    | {{conf.isWritePost(privelege)?'W':''}} 
+    | {{getRWposts(privelege)}} /
+    | {{$t('users')}} 
+    | {{conf.isReadUsers(privelege)?'R':''}}
+    | {{conf.isWriteUsers(privelege)?'W':''}} 
+    | {{getRWUsers(privelege)}}

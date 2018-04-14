@@ -1,0 +1,145 @@
+md-layout.pad5(md-flex="100")
+    form.w100(novalidate @submit.stop.prevent="submit")
+        //Website title
+        md-input-container
+            label {{$t('SITE_TITLE')}}
+            md-input(v-model="settings.SITE_TITLE")
+
+        //global keywords
+        md-input-container
+            label {{$t('KEYWORDS')}}
+            md-input(v-model="settings.KEYWORDS")
+
+        //website description
+        md-input-container
+            label {{$t('DESCRIPTION')}}
+            md-input(v-model="settings.DESCRIPTION")
+
+
+    md-list.w100
+        //Show/Hide anguages switcher on client
+        md-list-item.brdb
+            | {{$t('LANGS_SHOW_SWITCHER')}}
+            md-switch(v-model="settings.LANGS_SHOW_SWITCHER")
+
+        //Not registered users can see the client content
+        md-list-item.brdb
+            | {{$t('ANONYMOUS_ACCESS')}}
+            md-switch(v-model="settings.ANONYMOUS_ACCESS")
+
+        //Show post dates timeline on client
+        md-list-item.brdb
+            | {{$t('SHOW_POST_DATE')}}
+            md-switch(v-model="settings.SHOW_POST_DATE")
+
+        //Enable/disable login on client
+        md-list-item.brdb
+            | {{$t('LOGIN_SWITCHER')}}
+            md-switch(v-model="settings.LOGIN_SWITCHER")
+
+        //Enable/disable registration on client
+        md-list-item.brdb
+            | {{$t('REGISTRATION_SWITCHER')}}
+            md-switch(v-model="settings.REGISTRATION_SWITCHER")
+
+        //Priveleges for default registration users
+        md-list-item.bgray(v-if="settings.REGISTRATION_SWITCHER")
+            h4 {{$t('Privilege')}}
+        
+        //Admin access users
+        md-list-item.bgray(v-if="settings.REGISTRATION_SWITCHER")
+            | {{$t('Admin_access')}}
+            md-switch(v-model="privlgs.adminA")
+        
+        //File menegement access
+        md-list-item.bgray(v-if="settings.REGISTRATION_SWITCHER")
+            | {{$t('Files_management')}}
+            md-switch(v-model="privlgs.filesRW")
+        
+        //Categories write access
+        md-list-item.bgray(v-if="settings.REGISTRATION_SWITCHER")
+            | {{$t('Category_Write')}}
+            md-switch(v-model="privlgs.categoryW")
+        
+        //Categories read access
+        md-list-item.bgray(v-if="settings.REGISTRATION_SWITCHER")
+            | {{$t('Category_Read')}}
+            md-switch(v-model="privlgs.categoryR")
+        
+        //Users write access
+        md-list-item.bgray(v-if="settings.REGISTRATION_SWITCHER")
+            | {{$t('Users_Write')}}
+            md-switch(v-model="privlgs.usersW")
+        
+        //Users read access
+        md-list-item.bgray(v-if="settings.REGISTRATION_SWITCHER")
+            | {{$t('Users_Read')}}
+            md-switch(v-model="privlgs.usersR")
+        
+        //Posts write access
+        md-list-item.bgray(v-if="settings.REGISTRATION_SWITCHER")
+            | {{$t('Posts_Write')}}
+            md-switch(v-model="privlgs.postW")
+        
+        //Posts read access
+        md-list-item.bgray(v-if="settings.REGISTRATION_SWITCHER")
+            | {{$t('Posts_Read')}}
+            md-switch(v-model="privlgs.postR")
+
+        //User blocked
+        md-list-item.bgray.brdb(v-if="settings.REGISTRATION_SWITCHER")
+            | {{$t('Priv_Blocked')}}
+            md-switch(v-model="privlgs.blocked")
+
+        //Comments enable/disable on client
+        md-list-item.brdb
+            | {{$t('COMMENTS_ENABLE')}}
+            md-switch(v-model="settings.COMMENTS_ENABLE")
+
+        //
+            md-list-item.brdb
+                | {{$t('ANONYMOUS_COMMENTS')}}
+                md-switch(v-model="settings.ANONYMOUS_COMMENTS")
+
+        //Google recapcha enable/disable on client comments
+        md-list-item.brdb
+            | {{$t('RECAPCHA_COMMENTS')}}
+            md-switch(v-model="settings.RECAPCHA_COMMENTS")
+
+        md-list-item.bgray(v-if="settings.RECAPCHA_COMMENTS")
+            md-input-container
+                label {{$t('RECAPCHA_PUBLIC_KEY')}}
+                md-input(v-model="settings.RECAPCHA_PUBLIC_KEY")
+
+        md-list-item.bgray(v-if="settings.RECAPCHA_COMMENTS")
+            md-input-container
+                label {{$t('RECAPCHA_PRIVATE_KEY')}}
+                md-input(v-model="settings.RECAPCHA_PRIVATE_KEY")
+
+    md-list.w100
+        //Categories enable/disable on client
+        md-list-item.brdb
+            | {{$t('CATEGORIES_ENABLE')}}
+            md-switch(v-model="settings.CATEGORIES_ENABLE")
+
+        //Categories view as tree on client
+        md-list-item.brdb
+            | {{$t('CATEGORIES_TREE_LPANEL')}}
+            md-switch(v-model="settings.CATEGORIES_TREE_LPANEL")
+
+        //RSS enable/disable on client
+        md-list-item.brdb
+            | {{$t('RSS_ENABLE')}}
+            md-switch(v-model="settings.RSS_ENABLE")
+
+
+    //Manage buttons
+    md-layout(md-flex="100", md-align="center")
+
+        //Reset to default settings
+        md-button.md-raised(@click="resetSettings")
+            b {{$t('Reset')}}
+        
+        //Save settings
+        md-button.md-raised.md-primary(@click="saveSettings")
+            b {{$t('Save')}}

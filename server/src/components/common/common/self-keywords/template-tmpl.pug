@@ -1,0 +1,28 @@
+md-layout(md-flex="100")
+	//Title
+	md-switch.md-primary(v-model="keyWordsSelfOn")
+		| {{$t('Keywords')}}
+
+	md-layout(
+		md-flex="100", 
+		v-if="keyWordsSelfOn"
+	)
+		//Keywords list
+		md-layout(md-flex="100")
+			md-chips(v-model="keyWords") 
+		
+		//Input keyword
+		md-layout(md-flex="100")
+			.flex-row.w100
+				.flex-strtch1
+					form(novalidate, @submit.stop.prevent="submit")
+						md-input-container
+							label {{$t('Filed_name')}}
+							md-input(
+								:placeholder="$t('Filed_name')", 
+								v-model="keyWord"
+							)
+				//Add button
+				.flex-strtch0
+					md-button.md-raised(@click="addItem")
+						b {{$t('Add')}}

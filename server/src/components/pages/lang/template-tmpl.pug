@@ -1,0 +1,172 @@
+md-layout(md-flex="100")
+
+	//Language loading indicator
+	md-layout(
+		md-flex="100", 
+		md-align="center", 
+		v-if="$store.getters.getIndicatorLangsLoading"
+	)
+		md-layout(md-flex="100", md-align="center")
+			h2 {{$t('Langs_loading')}}...
+		md-layout(md-flex="100", md-align="center")
+			md-spinner(:md-size="150", md-indeterminate="")
+
+	//Language adding indicator
+	md-layout(
+		md-flex="100", 
+		md-align="center", 
+		v-if="$store.getters.getIndicatorLangsAdding"
+	)
+		md-layout(md-flex="100", md-align="center")
+			h2 {{$t('Langs_adding')}}...
+		md-layout(md-flex="100", md-align="center")
+			md-spinner(:md-size="150", md-indeterminate="")
+
+	//Language removing indicator
+	md-layout(
+		md-flex="100", 
+		md-align="center", 
+		v-if="$store.getters.getIndicatorLangsRemoving"
+	)
+		md-layout(md-flex="100", md-align="center")
+			h2 {{$t('Langs_removing')}}...
+		md-layout(md-flex="100", md-align="center")
+			md-spinner(:md-size="150", md-indeterminate="")
+
+	md-layout(
+		md-flex="100", 
+		v-show="!$store.getters.getIndicatorLangsLoading && \
+					!$store.getters.getIndicatorLangsAdding && \
+					!$store.getters.getIndicatorLangsRemoving"
+	)
+		md-layout.langs(md-flex="100", md-gutter="16")
+			md-tabs.md-transparent
+				//UI language
+				md-tab(id="idUILanguageID", :md-label="$t('UI_Language')")
+					md-layout(md-flex="100")
+						md-layout.pad15(
+							md-flex-xsmall="100",
+							md-flex-small="100",
+							md-flex-medium="60",
+							md-flex-large="60",
+							md-flex-xlarge="60",
+							md-flex-offset-xsmall="0",
+							md-flex-offset-small="0",
+							md-flex-offset-medium="20",
+							md-flex-offset-large="20",
+							md-flex-offset-xlarge="20"
+						)
+							md-layout(md-flex="100")
+								.lang-dlg
+
+									//Dialog title
+									md-layout(md-flex="100", md-align="center")
+										h3 {{$t('Select_User_Interface_Language')}}
+									
+									//Languages list
+									md-list.md-dense.w100.list-h-fixed-400.brdt.brdb
+										md-list-item.brdb(
+											@click.prevent="onSelectUILang(itm.code)",
+											v-for="itm in $store.getters.getUILangs",
+											:key="itm.code",
+											:class="{'active-lng':(itm.code==lng)}"
+										)
+											md-layout(md-flex="100")
+												| {{itm.lngName}}
+											
+									//Ok button
+									md-layout(md-flex="100", md-align="end")
+										md-button.md-raised.md-primary(
+											@click="onSelectUILangOK"
+										)
+											| OK
+
+
+				md-tab(
+					id="idContentLanguage", 
+					:md-label="$t('Content_Languages')"
+				)
+					//Content language switcher
+					md-layout.pad15(md-flex="100")
+						md-checkbox(v-model="bShowContentLang") 
+							| {{$t('Show_content_language_switcher_on_frontend')}}
+					
+					md-layout(md-flex="100")
+						md-layout.pad15(
+							md-flex-xsmall="100",
+							md-flex-small="100",
+							md-flex-medium="50",
+							md-flex-large="50",
+							md-flex-xlarge="50"
+						)
+							md-layout.lang-dlg2(md-flex="100")
+								//Title dialog
+								md-layout(md-flex="100", md-align="center")
+									h3 {{$t('Content_Languages')}}
+								
+								//Content selected languages list
+								md-layout.list-h-fixed-170.brdt(md-flex="100")
+									md-list.md-dense.w100
+										md-list-item.brdb(
+											v-for="(itm,index) in \
+											$store.getters.getLangsContentSelected",
+											:key="itm.code"
+										)
+											md-layout(md-flex="100")
+												md-checkbox(
+													:id="'cntlng-'+itm.code",
+													v-model="contentLang",
+													:md-value="itm.code")
+													| {{itm.name}}
+
+								//Remove button
+								md-layout(md-flex="100", md-align="end")
+									md-button.md-raised.md-primary(
+										@click="removeContentLanguage"
+									) 
+										| {{$t('Remove')}}
+
+						md-layout.lang-dlg2(
+							md-hide-medium="",
+							md-hide-large="",
+							md-hide-xlarge=""
+						)
+							| &nbsp;
+
+						
+						md-layout.pad15(
+							md-flex-xsmall="100",
+							md-flex-small="100",
+							md-flex-medium="50",
+							md-flex-large="50",
+							md-flex-xlarge="50"
+						)
+							md-layout.lang-dlg2(md-flex="100")
+
+								//Title dialog
+								md-layout(md-flex="100", md-align="center")
+									h3 {{$t('All_Languages')}}
+								
+								//All languages list
+								md-layout.list-h-fixed-170.brdt(md-flex="100")
+									md-list.md-dense.w100
+										md-list-item.brdb(
+											v-for="itm in \
+												$store.getters.getLangsContentAll",
+											:key="itm.code",
+											class="{'active-lng':itm.used=='1'}"
+										)
+											md-layout(md-flex="100")
+												md-checkbox(
+													:id="'allcntlng-'+itm.code",
+													v-model="contentAllLang",
+													:md-value="itm.code")
+													| {{itm.name}}
+								
+								//Add button
+								md-layout(md-flex="100", md-align="end")
+									md-button.md-raised.md-primary(
+										@click="addContentLanguage"
+									)
+										| {{$t('Add')}}
+

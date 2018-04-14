@@ -1,0 +1,72 @@
+div.h100
+    //Left panel phone view categories list
+    md-sidenav.md-left(ref="leftSidenavCat")
+        category-list(@toggleCat="toggleCat")
+    
+    //Right panel languages list
+    md-sidenav.md-left(ref="rightSidenavLang")
+        //Language select panel
+        md-layout.sidebar-item-nav(
+            md-column="", 
+            md-vertical-align="stretch",
+            v-for="itm in getLangsContentSelected",
+            :key="itm.id"
+        )
+            div.noselect(
+                @click="setUILang(itm)",
+                v-bind:class="{ active:itm.active }"
+            )
+                flag(:iso="itm.icon")
+                | {{ $t(itm.name) }}
+
+    .flex-container-col.h100
+        //Upper Menu
+        .thin
+            menu-component(
+                :toggleLang="toggleLang",
+                :toggleCat="toggleCat"
+            )
+
+        //Site title
+        .thin.brdb.my-hide-xsmall.site-title
+            md-layout.header2(
+                md-vertical-align="center", 
+                md-align="center",
+            )
+                h1 {{getSettings.SITE_TITLE}}
+
+        //Categories breadcrumb
+        .thin.brdb(
+            v-if="getSettings.CATEGORIES_ENABLE"
+        )
+            category-breadcrumb
+
+        //Main content
+        .thik
+            md-layout.postlist-bg(md-flex="100", md-gutter="0", md-row="")
+                //Left panel desktop categories list
+                md-layout.my-hide-xsmall.my-hide-small.lpanel-client.brdr(
+                    md-flex-xsmall="0",
+                    md-flex-small="0",
+                    md-flex-medium="30",
+                    md-flex-large="20",
+                    md-flex-xlarge="15",
+                    v-if="getSettings.CATEGORIES_ENABLE"
+                )
+                    category-list
+
+                //Right content
+                md-layout.plr5(
+                    md-flex-xsmall="100",
+                    md-flex-small="100",
+                    :md-flex-medium="getSettings.CATEGORIES_ENABLE?70:100",
+                    :md-flex-large="getSettings.CATEGORIES_ENABLE?80:100",
+                    :md-flex-xlarge="getSettings.CATEGORIES_ENABLE?85:100",
+                )
+                    router-view(name="contentmain")
+
+        //Footer
+        .thin.footer.plr5.postlist-bg
+            | footer
+            | counter
+

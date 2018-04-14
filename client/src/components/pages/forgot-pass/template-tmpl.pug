@@ -1,0 +1,55 @@
+md-layout.auth.pad5(md-flex="100")
+	md-layout(md-flex="100")
+		md-layout(
+			md-flex-xsmall="0",
+			md-flex-small="10",
+			md-flex-medium="20",
+			md-flex-large="30",
+			md-flex-xlarge="30",
+		)
+		md-layout.auth(
+			md-flex-xsmall="100",
+			md-flex-small="80",
+			md-flex-medium="60",
+			md-flex-large="40",
+			md-flex-xlarge="40",
+		)
+			md-layout.auth-top(md-flex="100")
+				//Title dialog
+				h1.ac.w100 {{ $t('forgot_password') }}
+
+				form.w100.auth-bg(
+					novalidate="", 
+					@submit.stop.prevent="submit"
+				)
+					//Email
+					md-input-container
+						label
+							| {{ $t('email') }}
+						md-input(
+							v-model="user.email",
+							name="email", 
+							v-validate="'required|email'", 
+							data-vv-delay="200", 
+							:class="{	'input': true,\
+										'is-danger': errors.has('email') }",
+							type="text",
+							:placeholder="$t('email')"
+						)
+					md-layout.c-red(
+						v-show="errors.has('email')", 
+						column="", 
+						md-align="end"
+					) 
+						| {{ errors.first('email') }}
+						br 
+						| &nbsp;
+
+					//Reset Button
+					md-layout(md-align="end")
+						router-link(to="/auth")
+							md-button.md-raised
+								| {{ $t('back') }}
+						md-button.md-raised.md-primary(@click="resetPassword")
+							| {{ $t('reset_password') }}
+

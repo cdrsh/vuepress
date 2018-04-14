@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <title>Slim 3</title>
+    </head>
+    <body>
+        <?php if (isset($name)) : ?>
+            <h2>Hello <?= htmlspecialchars($name); ?>!</h2>
+        <?php else: ?>
+            <p>Try <a href="http://www.slimframework.com">SlimFramework</a></p>
+        <?php endif; ?>
+    </body>
+</html>

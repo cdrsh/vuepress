@@ -1,0 +1,30 @@
+div.md-hide-xsmall
+	div(v-bind:class="[{bigLPanel:bShowLPanel},{smallLPanel:!bShowLPanel}]")
+		md-list.md-dense
+			md-list-item(
+				v-for="itm in $store.getters.getLpanelItems", 
+				:key="itm.path"
+			)
+				router-link(
+					:to="itm.path", 
+					active-class="active",
+					:class="{	'active-cls':	(($route.fullPath==itm.path)\
+									|| ($route.fullPath=='/admin' \
+									&& itm.path=='/admin/dashboard'))}"
+				)
+					//Icon item
+					md-icon.md-primary(:title="$t(itm.title)")
+						| {{itm.icon}}
+					
+					//Text item
+					span.md-primary(v-if="bShowLPanel")
+						| {{(bShowLPanel)?$t(itm.title):''}}
+
+					md-divider.md-inset(v-if="bShowLPanel")
+
+			//Show/Hide item
+			md-list-item(v-on:click.prevent="showHide")
+				md-icon.md-primary
+					| compare_arrows
+				span.md-primary
+					| {{(bShowLPanel)?$t('rollup'):''}}

@@ -1,0 +1,23 @@
+md-layout.pad15(md-flex="100")
+    md-layout.search-pnl(md-flex="100")
+        md-layout(
+            md-flex="100", 
+            md-align="center"
+        )
+            h3 {{$t('Search_Posts')}}
+            form.w100(  
+                novalidate, 
+                @submit.stop.prevent="submit"
+            )
+                md-input-container
+                    label {{$t('Find_text')}}
+                    md-input(v-model="findText")
+
+        md-layout(
+            md-flex="100", 
+            md-align="end"
+        )
+            md-button.md-raised(@click="cancelSearch") 
+                | {{$t('Cancel')}}
+            md-button.md-raised.md-primary(@click="searchDo") 
+                | {{$t('CL_Search')}}

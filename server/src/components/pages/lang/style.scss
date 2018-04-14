@@ -1,0 +1,33 @@
+.langs h1,
+.langs h2,
+.langs h3,
+.langs h4,
+.langs h5,
+.langs h6 {
+	color: #444444;
+}
+
+.list-h-fixed-400 {
+	height: 400px;
+	overflow-y: auto;
+}
+
+.list-h-fixed-170 {
+	height: 170px;
+	overflow-y: auto;
+}
+
+.lang-dlg {
+	border:1px solid #CCCCCC;
+	border-radius: 5px;
+	width:100%;
+}
+
+.lang-dlg2 {
+	border:1px solid #CCCCCC;
+	border-radius: 5px;
+}
+
+.active-lng {
+	background-color: #CCCCCC;
+}

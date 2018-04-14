@@ -1,0 +1,183 @@
+md-layout(md-flex="100")
+    md-layout(md-flex="100")
+        //Select operations dropdown
+        md-layout(
+            md-flex-xsmall="100", 
+            md-flex-small="100", 
+            md-flex-medium="40", 
+            md-flex-large="40", 
+            md-flex-xlarge="50",
+            md-align="start"
+        )
+            md-input-container
+                label(for="id_selectOperations") 
+                    | {{$t('Select_operations')}}
+                md-select(v-model="selectOperations", id="id_selectOperations")
+                    md-option(value="selallvis") 
+                        | {{$t('Select_All_Visible')}}
+                    md-option(value="unselallvis") 
+                        | {{$t('Unselect_All_Visible')}}
+                    md-option(value="selall") 
+                        | {{$t('Select_All')}}
+                    md-option(value="unselall") 
+                        | {{$t('Unselect_All')}}
+
+        //Manage buttons toolbar
+        md-layout(
+            md-flex-xsmall="100", 
+            md-flex-small="100", 
+            md-flex-medium="60", 
+            md-flex-large="60", 
+            md-flex-xlarge="50",
+            md-align="end"
+        )
+            //Add image button
+            md-button.md-primary.md-raised.h40(
+                v-if="onAddImage!==undefined",
+                @click="onAddImageClick"
+            )
+                md-icon add
+                b {{$t('Add')}}
+            
+            //Remove image button
+            md-button.md-primary.md-raised.h40(@click="removeImages")
+                md-icon close
+                b {{$t('Remove')}}
+            
+            //Search button
+            md-button.md-primary.md-raised.h40(@click="showFindDlg")
+                md-icon search
+                b {{$t('Find')}}
+
+    //Find images dialog
+    md-layout(md-flex="100", v-if="findDlg")
+        md-layout(md-flex="100")
+            form.w100(novalidate, @submit.stop.prevent="submit")
+                md-input-container
+                    //Find image title
+                    label
+                        | {{$t('Find_images')}}
+                    md-input(
+                        :placeholder="$t('Image_title')",
+                        v-model="findTitle"
+                    )
+                    //Manage button
+                    span.btn-find
+                        
+                        //Search button
+                        md-button.md-raised.btn-nospace(@click="findImages")
+                            md-icon search
+                            | {{$t('Search')}}
+                        
+                        //Reset images button
+                        md-button.md-raised.btn-nospace(@click="resetFindImages")
+                            md-icon replay
+                        
+                        //Close image button
+                        md-button.md-raised.btn-nospace(@click="showFindDlg")
+                            md-icon close
+    
+
+    md-layout(md-flex="100")
+        //Language content selected
+        md-layout(
+            md-flex-xsmall="100", 
+            md-flex-small="100", 
+            md-flex-medium="100", 
+            md-flex-large="40", 
+            md-flex-xlarge="50", 
+            md-align="start",
+            v-show="$store.getters.getLangsContentSelected.length>1"
+        )
+            select-content-language
+
+        //Paginator files
+        md-layout(
+            md-flex-xsmall="100", 
+            md-flex-small="100", 
+            md-flex-medium="100", 
+            :class="{\
+                'md-flex-large-100':\
+                    ($store.getters.getLangsContentSelected.length<2),\
+                'md-flex-large-60':\
+                    ($store.getters.getLangsContentSelected.length>1),\
+                'md-flex-xlarge-100':\
+                    ($store.getters.getLangsContentSelected.length<2),\
+                'md-flex-xlarge-50':\
+                    ($store.getters.getLangsContentSelected.length>1),\
+            }",
+            md-align="end"
+        )
+            paginator(
+                :onChange="(pgNum)=>{setImagesPgNum(pgNum)}", 
+                :itemsCount="getImagesCount", 
+                :itemsPerPage="$store.getters.getCategoriesItemsPerPage"
+            )
+    
+    //Files list
+    md-layout.stack-container(md-flex="100", md-align="start")
+        .stack-item(v-for="itm in getImagesPgNum", :key="itm.id")
+            md-card.ac
+                //Image
+                md-card-media.ac.pad15.mar5
+                    img.img-item(
+                        :src="getImgUrl(itm)", 
+                        @click="showFullImage(itm.id)"
+                    )
+                
+                //Manage buttons
+                md-layout.mtb5(md-flex="100", md-align="center")
+                    
+                    //Check file
+                    md-checkbox(    :md-value="itm.id", 
+                                    v-model="checkedFiles", 
+                                    class="md-primary"
+                    )
+
+                    //Edit file title
+                    md-button.md-icon-button.md-raised(
+                        @click="editTitle(itm)"
+                    )
+                        md-icon.icon-gray create
+                    
+                    //Remove file
+                    md-button.md-icon-button.md-raised(
+                        @click="removeOneImage(itm.id)"
+                    )
+                        md-icon.icon-gray close
+
+                md-layout.mtb5.brdb(md-flex="100")
+
+                //Edit file title dialog
+                md-layout(md-flex="100")
+
+                    //Edit file title
+                    md-input-container(
+                        v-if="editTitleDlg && itm.id==edTitle.id"
+                    )
+                        label {{$t('Edit_title')}}
+                        md-input(v-model="edTitle['title_'+getContentLang]")
+                    
+                    //Manage buttons
+                    md-layout.brdb(
+                        md-flex="100", 
+                        v-if="editTitleDlg && itm.id==edTitle.id", 
+                        md-align="center"
+                    )
+
+                        //Cancel edit title
+                        md-button.md-raised(@click="hideEditTitle")
+                            | {{$t('Cancel')}}
+                        
+                        //Save title
+                        md-button.md-raised(@click="saveEditTitle(itm)")
+                            | {{$t('Save')}}
+                        
+                //File title
+                .md-card-header
+                    | {{itm["title_"+$store.getters.getContentLang]}}
+                
+                //Date upload
+                .md-card-content
+                    | {{getDateFrmt(itm.dt)}}
+    

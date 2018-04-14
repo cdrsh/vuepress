@@ -1,0 +1,175 @@
+md-layout(
+    md-flex="100", 
+    md-vertical-align="start"
+)
+
+    //Show category name
+    md-layout.brdb(
+        md-flex="100", 
+        md-align="center", 
+        v-show="    byCategories!==undefined &&\
+                    getSettings.CATEGORIES_ENABLE"
+    )
+        h2 {{getCatObjActive["name_"+getContentLang]}}
+    
+    //No posts
+    md-layout(
+        md-flex="100", 
+        md-align="center", 
+        v-show="getPostList.length==0"
+    )
+        | {{$t('Norecords')}}
+
+    //posts>0
+    md-layout(
+        md-flex="100", 
+        md-align="center", 
+        v-show="getVisSearchPanel"
+    )
+        //Search posts
+        search-panel(
+            :closeSearch="toggleSearch",
+            @fText="setFindText"
+        )
+
+    //Show RSS dwopdown if enable
+    md-layout(
+        md-flex="100", 
+        md-align="end", 
+        v-if="  getSettings.RSS_ENABLE &&\
+                getCatObjActive.id!=-1 &&\
+                getCatObjActive.is_rss!=-1"
+    )
+        md-select.w100.ar(v-model="linkRss")
+            md-button.md-icon-button.ar(
+                slot="icon", 
+                md-menu-trigger=""
+            )
+                md-icon rss_feed
+            md-option(
+                v-for="itm in getCatObjActive.is_rss",
+                :key="itm.id",
+                :value="itm.id"
+            ) 
+                | {{itm.title}}
+
+
+    //Post card list
+    md-layout(
+        md-flex="100",
+        v-if="chkFirstPostTag()=='card'"
+    )
+        md-card.mar15(
+            v-for="itm in getPostList",
+            :key="itm.id",
+        )
+            md-card-area
+                md-card-header
+                    .md-title
+                        router-link.hrf(:to="'/category/'+getCatId+'/'+itm.id")
+                            b {{itm["title_"+getContentLang]}}
+                    .md-caption
+                        | {{getUserName(itm.user)}}
+                    .md-caption(    v-if="  $route.params.id==undefined &&\
+                                    getSettings.CATEGORIES_ENABLE")
+                        span.mr5(
+                            v-for="oneCat in itm.categories",
+                            :key="oneCat.id"
+                        )
+                            router-link.hrf(:to="'/category/'+oneCat.id")
+                                | {{oneCat["name_"+getContentLang]}}
+                    .md-caption
+                        div(v-html="getUserFieldsLink(itm)")
+                    .md-caption(v-if="getSettings.SHOW_POST_DATE")
+                        | {{itm.dtjs}}
+
+
+
+    //Post list
+    md-layout.row-content(
+        v-if="chkFirstPostTag()=='list'"
+        md-flex="100",
+        v-for="itm in getPostList",
+        :key="itm.id",
+    )
+        md-layout.brdb.pb15(
+            :md-flex-xsmall="getSettings.SHOW_POST_DATE?75:100",
+            :md-flex-small="getSettings.SHOW_POST_DATE?80:100",
+            :md-flex-medium="getSettings.SHOW_POST_DATE?80:100",
+            :md-flex-large="getSettings.SHOW_POST_DATE?80:100",
+            :md-flex-xlarge="getSettings.SHOW_POST_DATE?80:100",
+        )
+            //Post title
+            md-layout.md-title.ptb5(md-flex="100")
+                router-link.hrf(:to="'/category/'+getCatId+'/'+itm.id")
+                    b {{itm["title_"+getContentLang]}}
+
+            //Author
+            md-layout.md-caption(md-flex="100")
+                | {{getUserName(itm.user)}}
+
+            //Categories list if enable
+            md-layout.md-caption(
+                md-flex="100",
+                v-if="  $route.params.id==undefined &&\
+                        getSettings.CATEGORIES_ENABLE"
+            )
+                span.mr5(
+                    v-for="oneCat in itm.categories",
+                    :key="oneCat.id"
+                )
+                    router-link.hrf(:to="'/category/'+oneCat.id")
+                        | {{oneCat["name_"+getContentLang]}}
+        
+            //Userfields link out
+            md-layout.md-caption(md-flex="100")
+                div(v-html="getUserFieldsLink(itm)")
+
+        //Post date if enable
+        md-layout(
+            md-flex-xsmall="25",
+            md-flex-small="20",
+            md-flex-medium="20",
+            md-flex-large="20",
+            md-flex-xlarge="20",
+            v-if="getSettings.SHOW_POST_DATE"
+        )
+            .tineline-col(v-if="itm.dtjs!=-1")
+                .rectang
+                .triangle-left
+                .span.bullet
+                    | {{itm.dtjs}}
+            .tineline-col(v-if="itm.dtjs==-1")
+                .rectang
+                    | &nbsp;
+
+    //Preload scroll html-element
+    md-layout(
+        md-flex="100",
+        md-align="center",
+        v-show="!getFullLoaded"
+    )
+        mugen-scroll(
+            :handler="loadPosts"
+            :should-handle="!getPostLoadingIndicator",
+            :threshold="0.5"
+        )
+            //Индикатор Загрузки
+            md-layout(
+                md-flex="100",
+                md-align="center", 
+                v-if="getPostLoadingIndicator"
+            )
+                md-spinner(
+                    :md-size="150", 
+                    md-indeterminate=""
+                )
+
+    //Button load comments
+    md-layout(
+        md-flex="100", 
+        md-align="center",
+        v-if="!getPostLoadingIndicator && !getFullLoaded",
+    )
+        md-button.md-raised.md-primary(@click="loadPosts")
+            b {{$t('Load_some_posts')}}

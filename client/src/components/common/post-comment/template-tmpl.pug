@@ -1,0 +1,18 @@
+md-layout(
+    md-flex="100",
+    :style="{'padding-left':(itm.lvl*20)+'px'}"
+)
+    md-layout.mt15(md-flex="10", md-align="center")
+        avatar(:txt='avatarName(itm)', size=10)
+    md-layout(md-flex="90")
+        md-layout.md-caption(md-flex="100")
+            h4 {{itm.txt}}
+
+        md-layout.md-caption(md-flex="100")
+            | {{getUserName(itm)}}
+            br
+            | {{getDateFrm(itm.dt)}}
+        md-layout(md-flex="100", md-align="end", v-if="isRegged")
+            md-button.md-raised(@click="openDialog('answerCommentDialog')")
+                md-icon add
+                | {{$t('Answer')}}

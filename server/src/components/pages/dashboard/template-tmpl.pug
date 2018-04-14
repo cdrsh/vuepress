@@ -1,0 +1,102 @@
+md-layout(md-flex="100")
+
+	//Load graph indicator
+	md-layout(
+		md-flex="100", 
+		md-align="center", 
+		v-if="getLoadGraphsIndicator"
+	)
+		md-layout(md-flex="100", md-align="center")
+			h2 {{$t('Loading')}}...
+		md-layout(md-flex="100", md-align="center")
+			md-spinner(:md-size="150", md-indeterminate="")
+
+	md-layout(
+		md-flex="100",
+		v-if="!getLoadGraphsIndicator"
+	)
+		md-layout(md-flex="100")
+			//Posts
+			md-layout.pad5(
+				md-flex-xsmall="100",
+				md-flex-small="100",
+				md-flex-medium="50",
+				md-flex-large="50",
+				md-flex-xlarge="50"
+				)
+				.dash-bar
+					my-list(
+						:title="$t('posts')",
+						:list="getGraphPosts3",
+						:onSelectItem="onSelectItem",
+						iconAlign="left",
+					)
+					vue-chart(
+						type="line", 
+						:data="getGraphPostsDataCmp",
+						v-if="getGraphPostsData!==undefined",
+					)
+
+			//Categories
+			md-layout.pad5(
+				md-flex-xsmall="100",
+				md-flex-small="100",
+				md-flex-medium="50",
+				md-flex-large="50",
+				md-flex-xlarge="50"
+			)
+				.dash-bar
+					my-list(
+						:title="$t('categories')",
+						:list="getGraphCategories3",
+						:onSelectItem="onSelectItem",
+						iconAlign="left",
+					)
+					vue-chart(
+						type="line", 
+						:data="getGraphCategoriesDataCmp",
+						v-if="getGraphCategoriesData!==undefined",
+					)
+
+		md-layout(md-flex="100")
+			//Comments
+			md-layout.pad5(
+				md-flex-xsmall="100",
+				md-flex-small="100",
+				md-flex-medium="50",
+				md-flex-large="50",
+				md-flex-xlarge="50"
+				)
+				.dash-bar
+					my-list(
+						:title="$t('comments')",
+						:list="getGraphComments3",
+						:onSelectItem="onSelectItem",
+						iconAlign="left",
+					)
+					vue-chart(
+						type="line", 
+						:data="getGraphCommentsDataCmp",
+						v-if="getGraphCommentsData!==undefined",
+					)
+
+			//Users
+			md-layout.pad5(
+				md-flex-xsmall="100",
+				md-flex-small="100",
+				md-flex-medium="50",
+				md-flex-large="50",
+				md-flex-xlarge="50"
+			)
+				.dash-bar
+					my-list(
+						:title="$t('users')",
+						:list="getGraphUsers3",
+						:onSelectItem="onSelectItem",
+						iconAlign="left",
+					)
+					vue-chart(
+						type="line", 
+						:data="getGraphUsersDataCmp",
+						v-if="getGraphUsersData!==undefined",
+					)

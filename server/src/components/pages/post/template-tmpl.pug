@@ -1,0 +1,142 @@
+md-layout.mrgn5(md-flex="100")
+   
+    //Posts load indicator
+    md-layout(
+        md-flex="100", 
+        md-align="center", 
+        v-if="$store.getters.getPostLoadingIndicator"
+    )
+        md-layout(md-flex="100", md-align="center")
+            h2 {{$t('Posts_loading')}}...
+        md-layout(md-flex="100", md-align="center")
+            md-spinner(:md-size="150", md-indeterminate="")
+
+    //Posts add indicator
+    md-layout(
+        md-flex="100", 
+        md-align="center", 
+        v-if="$store.getters.getPostIndicatorAdding"
+    )
+        md-layout(md-flex="100", md-align="center")
+            h2 {{$t('Adding')}}...
+        md-layout(md-flex="100", md-align="center")
+            md-spinner(:md-size="150", md-indeterminate="")
+
+    //Get one post load indicator
+    md-layout(
+        md-flex="100", 
+        md-align="center", 
+        v-if="$store.getters.getVisEditPostLoading"
+    )
+        md-layout(md-flex="100", md-align="center")
+            h2 {{$t('Post_data_loading')}}...
+        md-layout(md-flex="100", md-align="center")
+            md-spinner(:md-size="150", md-indeterminate="")
+
+    //Remove post indicator
+    md-layout(
+        md-flex="100", 
+        md-align="center", 
+        v-if="$store.getters.getPostsRemoving"
+    )
+        md-layout(md-flex="100", md-align="center")
+            h2 {{$t('Posts_removing')}}...
+        md-layout(md-flex="100", md-align="center")
+            md-spinner(:md-size="150", md-indeterminate="")
+
+    //Save post indicator
+    md-layout(
+        md-flex="100", 
+        md-align="center", 
+        v-if="$store.getters.getVisPostSaving"
+    )
+        md-layout(md-flex="100", md-align="center")
+            h2 {{$t('Saving')}}...
+        md-layout(md-flex="100", md-align="center")
+            md-spinner(:md-size="150", md-indeterminate="")
+
+    //Find posts indicator
+    md-layout(
+        md-flex="100", 
+        md-align="center", 
+        v-if="$store.getters.getPostIndicatorFinding"
+    )
+        md-layout(md-flex="100", md-align="center")
+            h2 {{$t('Find')}}...
+        md-layout(md-flex="100", md-align="center")
+            md-spinner(:md-size="150", md-indeterminate="")
+
+    //Add post dialog
+    postadd(v-show="$store.getters.getAddPostVis")
+
+    //Edit post dialog
+    postedit(v-show="$store.getters.getEditPostVis")
+
+    //Posts list
+    md-layout(
+        md-flex="100", 
+        md-align="start",
+        v-show="!$store.getters.getPostsRemoving && \
+                !$store.getters.getEditPostVis && \
+                !$store.getters.getPostLoadingIndicator && \
+                !$store.getters.getPostIndicatorAdding && \
+                !$store.getters.getVisEditPostLoading && \
+                !$store.getters.getVisPostSaving && \
+                !$store.getters.getPostIndicatorFinding && \
+                !$store.getters.getAddPostVis"
+    )
+
+        //Buttons panel add/remove/find
+        btns-panel-category(
+            :onClickAdd="()=>{$store.dispatch('showAddPost',true)}",
+            :onClickDelete="()=>{$store.dispatch('removePosts',{r:$router})}",
+            :onClickFilter="openfindOnDlg",
+            :onClickCategory="onClickCategory"
+        )
+
+        //Find panel
+        post-find(
+            v-show="filterOn", 
+            :closeFind="closefindOnDlg"
+        )
+        
+        //Post list filtered
+        post-list-found(v-show="filterOn")
+
+        //Post list unfiltered
+        md-layout(
+            md-flex="100", 
+            v-show="!filterOn"
+        )
+            //Select category path dialog
+            post-select-category(
+                v-if="showSelectCategoryDlg",
+                :closeFn="closeCategories"
+            )
+
+            md-layout.brdb(
+                md-flex="100", 
+                v-show="!showSelectCategoryDlg"
+            )
+                //Breadcrumb categories
+                post-breadcrumb.brdt
+
+                //Paginator posts
+                md-layout.brdb(md-flex="100", md-align="end")
+                    paginator(
+                        :onChange="(pgNum)=>{this.$store.dispatch('loadPosts',{pgNum:pgNum,r:$router})}", 
+                        :itemsCount="$store.getters.getItemsPostCount", 
+                        :itemsPerPage="$store.getters.getItemsPostPerPage"
+                    )
+
+                //Content language selector
+                md-layout(
+                    md-flex="50", 
+                    md-align="end", 
+                    md-flex-offset="50",
+                    v-show="$store.getters.getLangsContentSelected.length>1"
+                )
+                    select-content-language
+
+                //Posts list
+                post-list

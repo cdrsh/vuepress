@@ -1,0 +1,142 @@
+md-layout.pad5(md-flex="100")
+
+    //Files list load indicator
+    md-layout(
+        md-flex="100", 
+        md-align="center", 
+        v-if="$store.getters.getFileLoading"
+    )
+        md-layout(md-flex="100", md-align="center")
+            h2 {{$t('Loading')}}...
+        md-layout(md-flex="100", md-align="center")
+            md-spinner(:md-size="150", md-indeterminate="")
+
+    //Image uploading indicator
+    md-layout(
+        md-flex="100", 
+        md-align="center", 
+        v-if="$store.getters.getFileUploading"
+    )
+        md-layout(md-flex="100", md-align="center")
+            h2 {{$t('Image_loading')}}...
+        md-layout(md-flex="100", md-align="center")
+            md-spinner(:md-size="150", md-indeterminate="")
+
+    //Image remove indicator
+    md-layout(
+        md-flex="100", 
+        md-align="center", 
+        v-if="$store.getters.getFileRemoving"
+    )
+        md-layout(md-flex="100", md-align="center")
+            h2 {{$t('Image_removing')}}...
+        md-layout(md-flex="100", md-align="center")
+            md-spinner(:md-size="150", md-indeterminate="")
+
+    //Save title image indicator
+    md-layout(
+        md-flex="100", 
+        md-align="center", 
+        v-if="$store.getters.getFileTitleSaving"
+    )
+        md-layout(md-flex="100", md-align="center")
+            h2 {{$t('Saving')}}...
+        md-layout(md-flex="100", md-align="center")
+            md-spinner(:md-size="150", md-indeterminate="")
+
+
+
+    md-layout(
+        md-flex="100",
+        v-show="!$store.getters.getFileLoading &&\
+              !$store.getters.getFileUploading &&\
+              !$store.getters.getFileRemoving &&\
+              !$store.getters.getFileTitleSaving"
+    )
+        
+        //Local file add dialog
+        md-layout(
+            md-flex="100", 
+            v-show="dlgAddImg"
+        )
+            md-toolbar.md-transparent.w100.md-dense.brdb
+                //Title dialog
+                h3.md-title(style="flex:1")
+                    | {{$t('Add_file')}}
+                
+                //Close button
+                md-button.md-icon-button.md-raised(
+                    :title="$t('Back_to_media_store')",
+                    @click="onAddImage"
+                )
+                    md-icon close
+            
+            //Language content selector
+            md-layout(
+                md-flex-xsmall="50", 
+                md-flex-small="50", 
+                md-flex-medium="50", 
+                md-flex-large="50", 
+                md-flex-xlarge="50", 
+                md-flex-offset="50", 
+                md-align="start",
+                v-show="$store.getters.getLangsContentSelected.length>1"
+            )
+                select-content-language
+
+            md-layout(md-flex="100")
+                //Select Image element
+                md-input-container
+                    label {{$t('Select_file')}}
+                    md-file(v-model="uploadImageAdd", @selected="onFileSelect")
+                
+                //Image title
+                md-input-container
+                    label
+                        | {{$t('Title')}}
+                    md-input(
+                        type="text",
+                        :placeholder="$t('Title')",
+                        v-model="localFile.title",
+                        name="Title", 
+                        v-validate="'required'", 
+                        data-vv-delay="1000", 
+                        :class="{'input': true, 'is-danger': errors.has('Title') }",
+                    )
+                    md-layout.c-red(
+                        v-show="errors.has('Title')", 
+                        column="", 
+                        md-align="end") 
+                        | {{ errors.first('Title') }}
+                
+                //Image width
+                md-input-container
+                    label
+                        | {{$t('Image_width')}}
+                    md-input(v-model="localFile.szw")
+                
+                //Image height
+                md-input-container
+                    label
+                        | {{$t('Image_height')}}
+                    md-input(v-model="localFile.szh")
+
+            //Manage buttons
+            md-layout(md-flex="100", md-align="end")
+
+                //Cancel
+                md-button.md-raised(@click="onAddImage")
+                    | {{$t('Cancel')}}
+
+                //Add image
+                md-button.md-raised.md-primary(@click="addImage")
+                    | {{$t('Add_Image')}}
+
+        //Files list
+        media-store-list(
+            :onSelectImagesInStore="onSelectImagesInStore", 
+            :onAddImage="onAddImage",
+            :onDeleteImage="onDeleteImage",
+            v-show="!dlgAddImg"
+        )
+        

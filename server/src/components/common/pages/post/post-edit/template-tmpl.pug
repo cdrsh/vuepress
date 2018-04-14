@@ -1,0 +1,199 @@
+md-layout.mrgn5.pr5(md-flex="100")
+    //Preview post
+    md-layout(v-if="previewDlg", md-flex="100")
+        md-layout.brdb(md-flex="100")
+
+            //Title
+            md-layout(md-flex="50", md-align="start")
+                h2 {{$t('Preview')}}
+            
+            //Close button
+            md-layout(md-flex="50", md-align="end")
+                md-button.md-raised(@click="onPreview")
+                    | {{$t('Close_preview')}}
+        //Preview content
+        md-layout(md-flex="100")
+            div(v-html="tinymceData")
+
+    //Category select panel
+    post-edit-select-category(
+        v-if="edPostSelCatVis",
+        :onSelectCategory="onSelectCategory",
+        :selectedIDsInit="selectedIDsInit",
+        :setAddPostSelCatVis="setEdPostSelCatVis"
+    )
+
+    //Edit post
+    md-layout(
+        v-show="!previewDlg && !edPostSelCatVis", 
+        md-flex="100"
+    )
+        md-layout(md-flex="100", md-align="start")
+            md-toolbar.md-transparent.w100.md-dense.brdb
+                //Title
+                h3.md-title(style="flex:1")
+                    | {{$t('Edit_post')}}
+                
+                //Close dialog button
+                md-button.md-icon-button.md-raised(
+                    :title="$t('Back_to_posts_list')", 
+                    @click="closeDialog"
+                )
+                    md-icon close
+            
+            //Manage buttons
+            md-layout(md-flex="100", md-align="end")
+                md-layout(
+                    md-flex-xsmall="100", 
+                    md-flex-small="100", 
+                    md-flex-medium="50", 
+                    md-flex-large="50", 
+                    md-flex-xlarge="50", 
+                    md-align="start"
+                )
+                    //Publish post button
+                    md-button.md-raised.md-primary.h40(@click="publishThisPost")
+                        b {{$t('Publish')}}
+                    
+                    //Save post button
+                    md-button.md-raised.md-primary.h40(@click="saveThisPost")
+                        b {{$t('Save')}}
+                    
+                    //Remove post button
+                    md-button.md-raised.md-primary.h40(@click="removeThisPost")
+                        b {{$t('Remove')}}
+                
+                //Language selector
+                md-layout(
+                    md-flex-xsmall="100", 
+                    md-flex-small="50", 
+                    md-flex-medium="50", 
+                    md-flex-large="50", 
+                    md-flex-xlarge="50", 
+                    mf-flex-offset-small="50",
+                    md-align="end"
+                )
+                    md-layout(
+                        md-flex="100", 
+                        md-align="end",
+                        v-show="$store.getters.getLangsContentSelected.length>1"
+                    )
+                        select-content-language
+
+        //Post title
+        md-layout(md-flex="100", md-align="start")
+            md-input-container
+                label {{$t('Post_title')}}
+                md-input(
+                    type="text",
+                    placeholder="Type here",
+                    v-model="postEdit['title_'+$store.getters.getContentLang]"
+                    name="Title", 
+                )
+
+        //Manage buttons
+        md-layout(md-flex="100", md-align="start")
+
+            //Add image
+            md-button.md-raised(@click.prevent="openImageAddDlg")
+                b {{$t('Add_Image')}}
+            
+            //Preview button
+            md-button.md-raised(@click.prevent="onPreview")
+                b {{$t('Preview')}}
+            
+            //Categories button
+            md-button.md-raised(@click.prevent="setEdPostSelCatVis")
+                b {{$t('categories')}}
+
+        //Add image
+        md-layout.mb5(md-flex="100", v-if="imageAddDlg")
+            add-file-dialog(
+                :closeFn="closeImageAddDlg", 
+                :onSelectImagesInternet="onSelectImagesInternet",
+                :onSelectImagesFromStore="onSelectImagesFromStore",
+                :onSelectImagesFromDisk="onSelectImagesFromDisk",
+            )
+
+        //Editor
+        md-layout(md-flex="100")
+            md-layout(md-flex="100", style="display:block;")
+                div.w100.h800px(id="editorContainer")
+               
+        //Editor status bar
+        md-layout(md-flex="100")
+
+            //Publish date
+            md-layout(md-flex="50")
+                label {{$t('Published')}}: {{postEdit.dt}}
+            
+            //Post status: published / not published
+            md-layout(md-flex="50", md-align="end")
+                label 
+                    | {{$t('Status')}}: 
+                    | {{(postEdit.ispub==1)?$t('Published'):$t('NotPublished')}}
+
+
+        //Additional post fields
+        md-layout.ptb5(md-flex="100", md-align="start")
+
+            //Category selector dropdown
+            md-input-container
+                label(for="id_categories_edpost") {{$t('categories')}}
+                md-select(
+                    id="id_categories_edpost", 
+                    v-model="categories_edpost"
+                )
+                    md-option(
+                        v-for="itm in postEdit.categories", 
+                        :value="itm.id", 
+                        :key="itm.id"
+                    ) 
+                        | {{itm["name_"+$store.getters.getContentLang]}}
+
+            md-layout.ptb5(md-flex="100")
+                md-layout.ptb5(
+                    md-flex="100", 
+                    v-for="cat in postEdit.categories",
+                    :key="cat.id",
+                    v-if="categories_edpost==cat.id"
+                )
+                    //Category name
+                    md-layout.pad15(md-flex="100", md-align="start")
+                        h3 
+                            | {{$t('Category')}}: 
+                            | {{cat['name_'+$store.getters.getContentLang]}}
+
+                        //Autonumerate
+                        md-layout.ptb5(
+                            md-flex="100", 
+                            md-align="start",
+                            v-if="cat.auto_numerate==0 && cat.orderby>2"
+                        )
+                            h3 {{$t('Order_By_Hand')}}:
+                            //Order by
+                            md-input-container
+                                label(v-if="cat.orderby==3") 
+                                    | {{$t('Post_Number_Forward_Direction')}}
+                                label(v-if="cat.orderby==4") 
+                                    | {{$t('Post_Number_Backward_Direction')}}
+                                md-input(v-model="cat.num")
+
+                        //User fields
+                        md-layout.ptb5(
+                            md-flex="100", 
+                            md-align="start",
+                            v-if="cat.user_fields_on==1"
+                        )
+                            h3 {{$t('User_fields')}}:
+                            md-layout.ptb5(
+                                md-flex="100", 
+                                md-align="start",
+                                v-for="fld in cat.ufldsArr",
+                                :key="fld.fldid"
+                            )
+                                md-input-container
+                                    //Field name
+                                    label {{fld.namef}}
+                                    //Field value
+                                    md-input(v-model="fld.valf")
