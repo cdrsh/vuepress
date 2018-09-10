@@ -4,8 +4,6 @@
 
 ### Three parts (Client/Admin/Backend)
 
-## [Try it](https://vuepress.ezyro.com)
-
 
 ### Configure
     Set constants in "backend/.env" to your host,db-host e.t.c
